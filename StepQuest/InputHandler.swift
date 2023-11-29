@@ -6,3 +6,22 @@
 //
 
 import Foundation
+import SpriteKit
+
+class InputHandler {
+    weak var gameScene: GameScene?
+    
+    init(gameScene: GameScene) {
+        self.gameScene = gameScene
+    }
+    
+    
+    func handleTap() {
+        
+    }
+    
+    
+    
+    
+    
+}

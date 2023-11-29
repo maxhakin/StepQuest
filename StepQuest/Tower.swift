@@ -1,5 +1,5 @@
 //
-//  Towers.swift
+//  Tower.swift
 //  StepQuest
 //
 //  Created by Max Hakin on 28/11/2023.
@@ -27,9 +27,9 @@ class Tower: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func attack(target: enemy) {
+    //func attack(target: enemy) {
         
-    }
+    //}
     
     func upgrade() {
         
@@ -40,6 +40,22 @@ class Tower: SKSpriteNode {
     }
     
     func targetInRange() {
+        
+    }
+    
+    func rotateTurret() {
+        
+    }
+    
+    func erase() {
+        
+    }
+    
+    func update() {
+        
+    }
+    
+    func render() {
         
     }
 }
