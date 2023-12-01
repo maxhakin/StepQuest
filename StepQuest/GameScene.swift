@@ -14,11 +14,17 @@ class GameScene: SKScene {
     private var initialTouchLocation: CGPoint?
     private var tileMap: SKTileMapNode?
     private var gameCam: SKCameraNode?
+    private var walkPath: GKGraph?
+    private var enemy: Enemy?
     
     override func didMove(to view: SKView) {
         loadTileMap()
-        self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode 
+        loadWalkPath()
+        let enemy = Enemy(graph: walkPath ?? <#default value#>)
+        
+        self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode
         self.camera = gameCam
+
         super.didMove(to: view)
         
     }
@@ -30,6 +36,15 @@ class GameScene: SKScene {
                 }
                 tileMap = tileMapNode
     }
+    
+    func loadWalkPath() {
+        guard let walkGraph = self.childNode(withName: "walkPath") as? GKGraph else {
+                    fatalError("Navigation graph not found")
+                }
+                walkPath = walkGraph
+    }
+    
+    
     
     func touchDown(atPoint pos : CGPoint) {
         
