@@ -12,27 +12,39 @@ import GameplayKit
 class Enemy: SKSpriteNode {
     var imageFile: String = "monster101"
     var health: Int = 100
-    var moveSpeed: Float = 12.0
-    var currentWaypoint: GKGraphNode?
-    var currentPosition: CGPoint?
-    var pathGraph: GKGraph
+    var moveSpeed: CGFloat = 500.0
+    var currentWaypoint: Int = 1
+    //var currentPosition: CGPoint?
+    var path: [SKNode]
     var currentNodeIndex: Int = 0
-    var path: [GKGraphNode]?
 
     
-    init(graph: GKGraph) {
+    init(path: [SKNode]) {
         let texture = SKTexture(imageNamed: imageFile)
-        self.pathGraph = graph
-        
+        self.path = path
         super.init(texture: texture, color: .clear, size: texture.size())
         
-        findPath()
+        
+        self.position = getStartPos() ?? CGPointZero
+        
+        self.zPosition = 2.0
         
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func getStartPos() -> CGPoint? {
+            if let firstNode = path.first {
+                print("first node found")
+                return firstNode.position
+            } else {
+                print("first node not found")
+                // Return nil or a default value if the array is empty
+                return nil
+            }
+        }
     
     func takeDamage() {
         
@@ -46,14 +58,35 @@ class Enemy: SKSpriteNode {
         
     }
     
-    func findPath() {
-        if let allNodes = pathGraph.nodes as? [GKGraphNode2D] {
-            let startNode = allNodes.max(by: { $0.position.y < $1.position.y })
-            let endNode = allNodes.min(by: { $0.position.y < $1.position.y })
+    func move(deltaTime: TimeInterval) {
+        print("Move being called")
+        let goalPos = path[currentWaypoint].position
+        
+        // Calculate the amount to move this frame
+        let amountToMove = CGFloat(moveSpeed) * CGFloat(deltaTime)
+
+        // Move in x direction
+        if self.position.x < goalPos.x {
+            self.position.x += min(amountToMove, goalPos.x - self.position.x)
+        } else if self.position.x > goalPos.x {
+            self.position.x -= min(amountToMove, self.position.x - goalPos.x)
+        }
+
+        // Move in y direction
+        if self.position.y < goalPos.y {
+            self.position.y += min(amountToMove, goalPos.y - self.position.y)
+        } else if self.position.y > goalPos.y {
+            self.position.y -= min(amountToMove, self.position.y - goalPos.y)
+        }
+
+        // Check if the enemy has reached the waypoint
+        if self.position == goalPos {
+            if currentWaypoint < path.count - 1 {
+                currentWaypoint += 1  // Move to the next waypoint
+            } else {return}
             
-            if let startNode = startNode, let endNode = endNode {
-                let path = pathGraph.findPath(from: startNode, to: endNode) as? [GKGraphNode2D]
-            }
+            
         }
     }
 }
+
