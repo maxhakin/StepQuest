@@ -21,6 +21,8 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         loadTileMap()
         loadWalkPath()
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapRecognizer)
         self.enemy = Enemy(path: walkPath)
         addChild(self.enemy!)
         self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode
@@ -49,7 +51,6 @@ class GameScene: SKScene {
             return waypoint1 < waypoint2
         }
     }
-        
         
     func touchDown(atPoint pos : CGPoint) {
             
@@ -97,5 +98,13 @@ class GameScene: SKScene {
         
         // Call the move function with deltaTime
         enemy?.move(deltaTime: deltaTime)
+    }
+    
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
+        print("Tap handled")
+            let viewLocation = recognizer.location(in: self.view)
+            let sceneLocation = convertPoint(fromView: viewLocation)
+        let tower = TurretTower(at: sceneLocation, map: terrainMap!)
+        self.addChild(tower)
     }
 }

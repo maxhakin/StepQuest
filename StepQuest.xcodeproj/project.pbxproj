@@ -17,7 +17,8 @@
 		9A157DD72B14FD3C00094855 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A157DD52B14FD3C00094855 /* LaunchScreen.storyboard */; };
 		9A157DDF2B14FDAB00094855 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A157DDE2B14FDAB00094855 /* HealthKit.framework */; };
 		9A6007892B162911003D22F6 /* GridTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9A6007872B162911003D22F6 /* GridTileSet.sks */; };
-		9A92ED662B16524100AE4CBD /* Tower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A92ED652B16524100AE4CBD /* Tower.swift */; };
+		9A6685952B1CBDDE0084ED50 /* TileMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6685942B1CBDDE0084ED50 /* TileMap.swift */; };
+		9A92ED662B16524100AE4CBD /* TurretTower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A92ED652B16524100AE4CBD /* TurretTower.swift */; };
 		9AB9079D2B17575100EDC200 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB9079C2B17575100EDC200 /* Enemy.swift */; };
 		9AB9079F2B17583F00EDC200 /* Projectile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB9079E2B17583F00EDC200 /* Projectile.swift */; };
 		9AB907A12B17607400EDC200 /* InputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB907A02B17607400EDC200 /* InputHandler.swift */; };
@@ -35,7 +36,8 @@
 		9A157DD62B14FD3C00094855 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9A157DDE2B14FDAB00094855 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		9A6007872B162911003D22F6 /* GridTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = GridTileSet.sks; path = ../GridTileSet.sks; sourceTree = "<group>"; };
-		9A92ED652B16524100AE4CBD /* Tower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tower.swift; sourceTree = "<group>"; };
+		9A6685942B1CBDDE0084ED50 /* TileMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMap.swift; sourceTree = "<group>"; };
+		9A92ED652B16524100AE4CBD /* TurretTower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurretTower.swift; sourceTree = "<group>"; };
 		9AB9079C2B17575100EDC200 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		9AB9079E2B17583F00EDC200 /* Projectile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Projectile.swift; sourceTree = "<group>"; };
 		9AB907A02B17607400EDC200 /* InputHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputHandler.swift; sourceTree = "<group>"; };
@@ -78,8 +80,9 @@
 				9A157DC82B14FD3A00094855 /* GameScene.sks */,
 				9A157DCA2B14FD3A00094855 /* Actions.sks */,
 				9A157DCC2B14FD3A00094855 /* GameScene.swift */,
+				9A6685942B1CBDDE0084ED50 /* TileMap.swift */,
 				9AB907A02B17607400EDC200 /* InputHandler.swift */,
-				9A92ED652B16524100AE4CBD /* Tower.swift */,
+				9A92ED652B16524100AE4CBD /* TurretTower.swift */,
 				9AB9079C2B17575100EDC200 /* Enemy.swift */,
 				9AB9079E2B17583F00EDC200 /* Projectile.swift */,
 				9A157DCE2B14FD3A00094855 /* GameViewController.swift */,
@@ -176,8 +179,9 @@
 				9A157DCD2B14FD3A00094855 /* GameScene.swift in Sources */,
 				9AB9079D2B17575100EDC200 /* Enemy.swift in Sources */,
 				9A157DCF2B14FD3A00094855 /* GameViewController.swift in Sources */,
+				9A6685952B1CBDDE0084ED50 /* TileMap.swift in Sources */,
 				9A157DC72B14FD3A00094855 /* AppDelegate.swift in Sources */,
-				9A92ED662B16524100AE4CBD /* Tower.swift in Sources */,
+				9A92ED662B16524100AE4CBD /* TurretTower.swift in Sources */,
 				9AB907A12B17607400EDC200 /* InputHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
