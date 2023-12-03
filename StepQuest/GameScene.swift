@@ -12,7 +12,7 @@ class GameScene: SKScene {
     
     private var inputHandler: InputHandler!
     private var initialTouchLocation: CGPoint?
-    private var tileMap: SKTileMapNode?
+    private var terrainMap: SKTileMapNode?
     private var gameCam: SKCameraNode?
     private var walkPath: [SKNode] = []
     private var enemy: Enemy?
@@ -35,7 +35,7 @@ class GameScene: SKScene {
         guard let tileMapNode = self.childNode(withName: "terrainMap") as? SKTileMapNode else {
             fatalError("Tile map node not found")
         }
-        tileMap = tileMapNode
+        terrainMap = tileMapNode
     }
     
     func loadWalkPath() {

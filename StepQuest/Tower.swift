@@ -8,18 +8,25 @@
 import Foundation
 import SpriteKit
 
-class Tower: SKSpriteNode {
+class TurretTower: SKNode {
     var level: Int = 0
     var range: Float = 0
     var attackSpeed: Float = 0
-    var imageFile: String = " "
+    var base: SKSpriteNode
+    var turret: SKSpriteNode
+    var baseImage: String = ""
+    var turretImage: String = ""
     var damage: Int = 0
     var attackType: Int = 0
-    var towerType: String = ""
+    var towerType: String = "turret1"
+    var tileMap: SKTileMapNode
     
-    init(imageFile: String) {
-        let texture = SKTexture(imageNamed: imageFile)
-        super.init(texture: texture, color: .clear, size: texture.size())
+    init(at location: CGPoint, map: SKTileMapNode) {
+        self.tileMap = map
+        let texture = SKTexture(imageNamed: baseImage)
+        
+        
+        updateTowerMap(at: location, towerName: towerType)
         
     }
     
@@ -58,4 +65,24 @@ class Tower: SKSpriteNode {
     func render() {
         
     }
+    
+    func updateTowerMap(at location: CGPoint, towerName: String) {
+        // Convert the location to the tile tileMap's coordinate system
+        let column = tileMap.tileColumnIndex(fromPosition: location)
+        let row = tileMap.tileRowIndex(fromPosition: location)
+
+        // Get the tile definition at this column and row
+        if let tile = tileMap.tileDefinition(atColumn: column, row: row) {
+            // Check if the tile has userData 'towerType'
+            if let userData = tile.userData, userData["towerType"] as? String != nil {
+                    // Update tower type on the tile map
+                    userData["towerType"] = towerName
+            }
+        }
+    }
+    
+    func makeTowerImg() {
+        
+    }
 }
+
