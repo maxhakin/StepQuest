@@ -25,10 +25,12 @@ class TurretTower: SKNode {
     init(at location: CGPoint, map: SKTileMapNode) {
         self.tileMap = map
         self.towerLocation = location
-        let texture = SKTexture(imageNamed: baseImage)
         super.init()
+        self.name = towerType
+        let texture = SKTexture(imageNamed: baseImage)
         
-        placeTower(location: location, towerName: towerType)
+        
+        placeTower(location: location)
         
     }
     
@@ -68,8 +70,8 @@ class TurretTower: SKNode {
         
     }
     
-    func setTower(at location: CGPoint, towerName: String) {
-        tileMap.setTileTower(at: location, towerName: towerName)
+    func setTower(at location: CGPoint, tower: TurretTower) {
+        tileMap.setTileTower(at: location, tower: tower)
     }
     
     func getTower(at location: CGPoint) -> String {
@@ -77,8 +79,8 @@ class TurretTower: SKNode {
     }
     
     
-    func placeTower(location: CGPoint, towerName: String) {
-        tileMap.setTileTower(at: location, towerName: towerName)
+    func placeTower(location: CGPoint) {
+        tileMap.setTileTower(at: location, tower: self)
         let centre = tileMap.getTileCentre(at: location)
         
         base = SKSpriteNode(imageNamed: baseImage)
@@ -90,6 +92,11 @@ class TurretTower: SKNode {
         base?.position = centre
         turret?.position = centre
         
+        // Add base and turret as children to the TurretTower
+        if let base = base, let turret = turret {
+            addChild(base)
+            addChild(turret)
+        }
         
     }
 }

@@ -17,12 +17,13 @@ class GameScene: SKScene {
     private var walkPath: [SKNode] = []
     private var enemy: Enemy?
     private var lastUpdateTime: TimeInterval = 0
+    private var tapRecogniser: UITapGestureRecognizer?
     
     override func didMove(to view: SKView) {
         loadTileMap()
         loadWalkPath()
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        view.addGestureRecognizer(tapRecognizer)
+        tapRecogniser = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapRecogniser!)
         self.enemy = Enemy(path: walkPath)
         addChild(self.enemy!)
         self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode
@@ -74,12 +75,7 @@ class GameScene: SKScene {
     }
         
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first, let startLocation = initialTouchLocation else {return}
-        let endLocation = touch.location(in: self)
-            
-        //if isTap(at: startLocation, endLocation: endLocation) {
-        //   inputHandler.
-        //}
+        
     }
         
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -88,7 +84,6 @@ class GameScene: SKScene {
         
         
     override func update(_ currentTime: TimeInterval) {
-        print("updating")
         
         // Called before each frame is rendered
         let deltaTime = currentTime - lastUpdateTime
@@ -102,9 +97,20 @@ class GameScene: SKScene {
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         print("Tap handled")
-            let viewLocation = recognizer.location(in: self.view)
-            let sceneLocation = convertPoint(fromView: viewLocation)
-        let tower = TurretTower(at: sceneLocation, map: terrainMap!)
-        self.addChild(tower)
+        let viewLocation = recognizer.location(in: self.view)
+        let sceneLocation = convertPoint(fromView: viewLocation)
+        
+        // Check if the tile at the location is 'buildable'
+        if let tile = terrainMap?.getTile(location: sceneLocation),
+            let userData = tile.userData,
+            let isBuildable = userData["buildable"] as? Bool,
+            isBuildable == true {
+            print("tile is buildable")
+            // The tile is buildable, proceed with placing a tower or other actions
+            let tower = TurretTower(at: sceneLocation, map: terrainMap!)
+            self.addChild(tower)        } else { print("tile is not buildable")
+            // The tile is not buildable, handle accordingly (e.g., show an error message)
+        }
+        
     }
 }

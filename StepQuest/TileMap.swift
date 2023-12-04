@@ -19,17 +19,17 @@ extension SKTileMapNode {
         return tileDefinition(atColumn: col, row: row)!
     }
     
-    func setTileTower(at location: CGPoint, towerName: String) {
-        let tile = getTile(location: location)
-        // Check if the tile has userData 'towerType'
-        if let userData = tile.userData, userData["towerType"] as? String != nil {
-            // Update tower type on the tile map
-            userData["towerType"] = towerName
-        }
+    func setTileTower(at location: CGPoint, tower: TurretTower) {
+        tower.position = getTileCentre(at: location)
+        self.addChild(tower)
+        
     }
     
     
     func getTileTower(at location: CGPoint) -> String {
+        
+        
+        
         let tile = getTile(location: location)
         if let userData = tile.userData, userData["towerType"] as? String != nil {
             // Return tower type

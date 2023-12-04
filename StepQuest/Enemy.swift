@@ -59,7 +59,6 @@ class Enemy: SKSpriteNode {
     }
     
     func move(deltaTime: TimeInterval) {
-        print("Move being called")
         let goalPos = path[currentWaypoint].position
         
         // Calculate the amount to move this frame
