@@ -14,7 +14,7 @@ extension SKTileMapNode {
         // Convert the location to the tile tileMap's coordinate system
         let col = tileColumnIndex(fromPosition: location)
         let row = tileRowIndex(fromPosition: location)
-
+        print(col, row)
         // Return the tile definition at this column and row
         return tileDefinition(atColumn: col, row: row)!
     }

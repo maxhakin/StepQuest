@@ -97,19 +97,26 @@ class GameScene: SKScene {
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         print("Tap handled")
-        let viewLocation = recognizer.location(in: self.view)
-        let sceneLocation = convertPoint(fromView: viewLocation)
+        
+        let tileMapScale = terrainMap?.xScale
+        let viewLocation = recognizer.location(in: self.view)        
+        var sceneLocation = convertPoint(fromView: viewLocation)
+        
+        sceneLocation = CGPoint(x: sceneLocation.x / tileMapScale!, y: sceneLocation.y / tileMapScale!)
+        
+        
         
         // Check if the tile at the location is 'buildable'
-        if let tile = terrainMap?.getTile(location: sceneLocation),
-            let userData = tile.userData,
-            let isBuildable = userData["buildable"] as? Bool,
-            isBuildable == true {
-            print("tile is buildable")
-            // The tile is buildable, proceed with placing a tower or other actions
-            let tower = TurretTower(at: sceneLocation, map: terrainMap!)
-            self.addChild(tower)        } else { print("tile is not buildable")
-            // The tile is not buildable, handle accordingly (e.g., show an error message)
+        let tile = terrainMap?.getTile(location: sceneLocation)
+        let userData = tile?.userData
+        let isBuildable = userData?["buildable"] as? Bool
+        if isBuildable == true {
+                print("tile is buildable")
+                // The tile is buildable, proceed with placing a tower or other actions
+                let tower = TurretTower(at: sceneLocation, map: terrainMap!)
+            scene?.addChild(tower)
+        } else { print("tile is not buildable")
+            // The tile is not buildable
         }
         
     }

@@ -80,7 +80,6 @@ class TurretTower: SKNode {
     
     
     func placeTower(location: CGPoint) {
-        tileMap.setTileTower(at: location, tower: self)
         let centre = tileMap.getTileCentre(at: location)
         
         base = SKSpriteNode(imageNamed: baseImage)
