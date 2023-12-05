@@ -21,6 +21,7 @@ class TurretTower: SKNode {
     var towerType: String = "turret1"
     var tileMap: SKTileMapNode
     var towerLocation: CGPoint
+    var scale: CGFloat = 0.65
     
     init(at location: CGPoint, map: SKTileMapNode) {
         self.tileMap = map
@@ -88,14 +89,20 @@ class TurretTower: SKNode {
         base?.zPosition = 2
         turret?.zPosition = 3
         
-        base?.position = centre
-        turret?.position = centre
+        base?.setScale(scale)
+        turret?.setScale(scale)
+        
+        
+        base?.position = CGPoint(x: 0, y: 0)
+        turret?.position = CGPoint(x: 0, y: 0)
         
         // Add base and turret as children to the TurretTower
         if let base = base, let turret = turret {
             addChild(base)
             addChild(turret)
         }
+        
+        self.position = centre
         
     }
 }

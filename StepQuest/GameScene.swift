@@ -101,6 +101,7 @@ class GameScene: SKScene {
         let tileMapScale = terrainMap?.xScale
         let viewLocation = recognizer.location(in: self.view)        
         var sceneLocation = convertPoint(fromView: viewLocation)
+        let placeLocation = sceneLocation
         
         sceneLocation = CGPoint(x: sceneLocation.x / tileMapScale!, y: sceneLocation.y / tileMapScale!)
         
@@ -113,7 +114,7 @@ class GameScene: SKScene {
         if isBuildable == true {
                 print("tile is buildable")
                 // The tile is buildable, proceed with placing a tower or other actions
-                let tower = TurretTower(at: sceneLocation, map: terrainMap!)
+                let tower = TurretTower(at: placeLocation, map: terrainMap!)
             scene?.addChild(tower)
         } else { print("tile is not buildable")
             // The tile is not buildable
