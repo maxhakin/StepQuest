@@ -102,6 +102,8 @@ class TurretTower: SKNode {
             addChild(turret)
         }
         
+        print(centre)
+        
         self.position = centre
         
     }

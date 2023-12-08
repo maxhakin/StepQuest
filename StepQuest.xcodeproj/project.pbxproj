@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A0C8E032B2232F10047A21A /* TowerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0C8E022B2232F10047A21A /* TowerHandler.swift */; };
+		9A0C8E052B2234090047A21A /* LevelHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0C8E042B2234090047A21A /* LevelHandler.swift */; };
 		9A157DC72B14FD3A00094855 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A157DC62B14FD3A00094855 /* AppDelegate.swift */; };
 		9A157DC92B14FD3A00094855 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9A157DC82B14FD3A00094855 /* GameScene.sks */; };
 		9A157DCB2B14FD3A00094855 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9A157DCA2B14FD3A00094855 /* Actions.sks */; };
@@ -25,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9A0C8E022B2232F10047A21A /* TowerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerHandler.swift; sourceTree = "<group>"; };
+		9A0C8E042B2234090047A21A /* LevelHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelHandler.swift; sourceTree = "<group>"; };
 		9A157DC32B14FD3900094855 /* StepQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A157DC62B14FD3A00094855 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9A157DC82B14FD3A00094855 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 				9A157DC82B14FD3A00094855 /* GameScene.sks */,
 				9A157DCA2B14FD3A00094855 /* Actions.sks */,
 				9A157DCC2B14FD3A00094855 /* GameScene.swift */,
+				9A0C8E022B2232F10047A21A /* TowerHandler.swift */,
+				9A0C8E042B2234090047A21A /* LevelHandler.swift */,
 				9A6685942B1CBDDE0084ED50 /* TileMap.swift */,
 				9AB907A02B17607400EDC200 /* InputHandler.swift */,
 				9A92ED652B16524100AE4CBD /* TurretTower.swift */,
@@ -179,8 +185,10 @@
 				9A157DCD2B14FD3A00094855 /* GameScene.swift in Sources */,
 				9AB9079D2B17575100EDC200 /* Enemy.swift in Sources */,
 				9A157DCF2B14FD3A00094855 /* GameViewController.swift in Sources */,
+				9A0C8E032B2232F10047A21A /* TowerHandler.swift in Sources */,
 				9A6685952B1CBDDE0084ED50 /* TileMap.swift in Sources */,
 				9A157DC72B14FD3A00094855 /* AppDelegate.swift in Sources */,
+				9A0C8E052B2234090047A21A /* LevelHandler.swift in Sources */,
 				9A92ED662B16524100AE4CBD /* TurretTower.swift in Sources */,
 				9AB907A12B17607400EDC200 /* InputHandler.swift in Sources */,
 			);

@@ -52,6 +52,13 @@ class GameScene: SKScene {
             return waypoint1 < waypoint2
         }
     }
+    
+    func getTowerPlaces() -> [SKShapeNode] {
+        var towerPlaces: [SKShapeNode] = self["towerPlace"].compactMap { $0 as? SKShapeNode }
+        return towerPlaces
+        
+        
+    }
         
     func touchDown(atPoint pos : CGPoint) {
             
@@ -101,7 +108,7 @@ class GameScene: SKScene {
         let tileMapScale = terrainMap?.xScale
         let viewLocation = recognizer.location(in: self.view)        
         var sceneLocation = convertPoint(fromView: viewLocation)
-        let placeLocation = sceneLocation
+        let placeLocation = terrainMap!.getTileCentre(at: sceneLocation)
         
         sceneLocation = CGPoint(x: sceneLocation.x / tileMapScale!, y: sceneLocation.y / tileMapScale!)
         
