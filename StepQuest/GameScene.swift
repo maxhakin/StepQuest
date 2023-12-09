@@ -15,19 +15,23 @@ class GameScene: SKScene {
     private var terrainMap: SKTileMapNode?
     private var gameCam: SKCameraNode?
     private var walkPath: [SKNode] = []
+    private var towerPlaces: [SKShapeNode] = []
     private var enemy: Enemy?
     private var lastUpdateTime: TimeInterval = 0
     private var tapRecogniser: UITapGestureRecognizer?
+    private var towerHandler: TowerHandler?
     
     override func didMove(to view: SKView) {
         loadTileMap()
         loadWalkPath()
+        loadTowerPlaces()
         tapRecogniser = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapRecogniser!)
         self.enemy = Enemy(path: walkPath)
         addChild(self.enemy!)
         self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode
         self.camera = gameCam
+        self.towerHandler = TowerHandler(gameScene: self)
         
         super.didMove(to: view)
         
@@ -42,9 +46,6 @@ class GameScene: SKScene {
     }
     
     func loadWalkPath() {
-        // Temporary array to hold nodes and their order values
-        var nodesWithOrder: [(node: SKNode, order: Int)] = []
-        
         walkPath = self["walkPath"]
         walkPath.sort { (node1, node2) in
             let waypoint1 = node1.userData?["waypoint"] as? Int ?? Int.max
@@ -53,11 +54,12 @@ class GameScene: SKScene {
         }
     }
     
+    func loadTowerPlaces() {
+        towerPlaces = self["towerPlace"].compactMap { $0 as? SKShapeNode }
+    }
+    
     func getTowerPlaces() -> [SKShapeNode] {
-        var towerPlaces: [SKShapeNode] = self["towerPlace"].compactMap { $0 as? SKShapeNode }
         return towerPlaces
-        
-        
     }
         
     func touchDown(atPoint pos : CGPoint) {
@@ -105,27 +107,22 @@ class GameScene: SKScene {
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         print("Tap handled")
         
-        let tileMapScale = terrainMap?.xScale
         let viewLocation = recognizer.location(in: self.view)        
         var sceneLocation = convertPoint(fromView: viewLocation)
-        let placeLocation = terrainMap!.getTileCentre(at: sceneLocation)
+
+        let touchedNode = atPoint(sceneLocation)
+
+        if let touchedShapeNode = touchedNode as? SKShapeNode {
+            for place in towerPlaces {
+                    if place.contains(sceneLocation) {
+                        
+                        towerHandler?.addTurretTower(at: place, levelString: "level1")
+                        break
+                        }
+                    }
+        }
         
-        sceneLocation = CGPoint(x: sceneLocation.x / tileMapScale!, y: sceneLocation.y / tileMapScale!)
-        
-        
-        
-        // Check if the tile at the location is 'buildable'
-        let tile = terrainMap?.getTile(location: sceneLocation)
-        let userData = tile?.userData
-        let isBuildable = userData?["buildable"] as? Bool
-        if isBuildable == true {
-                print("tile is buildable")
-                // The tile is buildable, proceed with placing a tower or other actions
-                let tower = TurretTower(at: placeLocation, map: terrainMap!)
-            scene?.addChild(tower)
-        } else { print("tile is not buildable")
-            // The tile is not buildable
         }
         
     }
-}
+

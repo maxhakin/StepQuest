@@ -10,21 +10,29 @@ import SpriteKit
 
 class TowerHandler {
     
-    var towers: [TurretTower] = []
+    var towerPlaces: [SKShapeNode] = []
+    var towers: [Tower] = []
     weak var gameScene: GameScene?
-    weak var tileMap: SKTileMapNode?
 
-    init(gameScene: GameScene, tileMap: SKTileMapNode) {
+    init(gameScene: GameScene) {
         self.gameScene = gameScene
-        self.tileMap = tileMap
-        tileMap.childNode(withName: <#T##String#>)
+        towerPlaces = gameScene.getTowerPlaces()
     }
 
-    func addTower(at location: CGPoint) {
-        let tileCentreLocation = tileMap!.getTileCentre(at: location)
-        let newTower = TurretTower(at: tileCentreLocation, map: tileMap!)
-        towers.append(newTower)
-        gameScene?.addChild(newTower)
+    func addTurretTower(at place: SKShapeNode, levelString: String) {
+        if !isTower(at: place) {
+            let newTower = TurretTower(placeNode: place, levelString: levelString)
+            towers.append(newTower)
+            place.addChild(newTower)
+        }
+    }
+    
+    func isTower(at place: SKShapeNode) -> Bool {
+        if place.children.count > 0 {
+            return true
+        } else {
+            return false
+        }
     }
 
 }

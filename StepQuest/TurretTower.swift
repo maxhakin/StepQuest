@@ -8,30 +8,50 @@
 import Foundation
 import SpriteKit
 
-class TurretTower: SKNode {
-    var level: Int = 1
-    var range: Float = 100
-    var attackSpeed: Float = 50
-    var base: SKSpriteNode?
-    var turret: SKSpriteNode?
-    var baseImage: String = "towerBase1"
-    var turretImage: String = "turretGun1"
-    var damage: Int = 0
-    var attackType: Int = 0
-    var towerType: String = "turret1"
-    var tileMap: SKTileMapNode
-    var towerLocation: CGPoint
-    var scale: CGFloat = 0.65
+class TurretTower: Tower {
+    enum TowerLevel {
+        case level1
+        case level2
+        case level3
+
+        var stats: (range: Float, attackSpeed: Float, damage: Int, baseImage: String, topImage: String) {
+            switch self {
+                case .level1:
+                    return (100, 50, 10, "towerBase1", "turretGun1")
+                case .level2:
+                    return (150, 75, 20, "towerBase2", "turretGun2")
+                case .level3:
+                    return (200, 100, 30, "towerBase3", "turretGun3")
+            }
+        }
+    }
+    var level: TowerLevel
     
-    init(at location: CGPoint, map: SKTileMapNode) {
-        self.tileMap = map
-        self.towerLocation = location
-        super.init()
-        self.name = towerType
-        let texture = SKTexture(imageNamed: baseImage)
+    
+    
+    init(placeNode: SKShapeNode, levelString: String) {
+        switch levelString {
+            case "level1":
+                level = .level1
+            case "level2":
+                level = .level2
+            case "level3":
+                level = .level3
+            default:
+                level = .level1
+        }
         
+        let stats = level.stats
+        super.init(placeNode: placeNode)
         
-        placeTower(location: location)
+        range = stats.range
+        attackSpeed = stats.attackSpeed
+        damage = stats.damage
+        baseImage = stats.baseImage
+        topImage = stats.topImage
+        
+        makeTower(placeNode: placeNode)
+        
         
     }
     
@@ -39,73 +59,8 @@ class TurretTower: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //func attack(target: enemy) {
-        
-    //}
-    
-    func upgrade() {
-        
-    }
-    
-    func findTarget() {
-        
-    }
-    
-    func targetInRange() {
-        
-    }
-    
-    func rotateTurret() {
-        
-    }
-    
-    func erase() {
-        
-    }
-    
-    func update() {
-        
-    }
-    
-    func render() {
-        
-    }
-    
-    func setTower(at location: CGPoint, tower: TurretTower) {
-        tileMap.setTileTower(at: location, tower: tower)
-    }
-    
-    func getTower(at location: CGPoint) -> String {
-        return tileMap.getTileTower(at: location)
-    }
+   
     
     
-    func placeTower(location: CGPoint) {
-        let centre = tileMap.getTileCentre(at: location)
-        
-        base = SKSpriteNode(imageNamed: baseImage)
-        turret = SKSpriteNode(imageNamed: turretImage)
-        
-        base?.zPosition = 2
-        turret?.zPosition = 3
-        
-        base?.setScale(scale)
-        turret?.setScale(scale)
-        
-        
-        base?.position = CGPoint(x: 0, y: 0)
-        turret?.position = CGPoint(x: 0, y: 0)
-        
-        // Add base and turret as children to the TurretTower
-        if let base = base, let turret = turret {
-            addChild(base)
-            addChild(turret)
-        }
-        
-        print(centre)
-        
-        self.position = centre
-        
-    }
 }
 
