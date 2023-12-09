@@ -55,19 +55,12 @@ class Tower: SKNode {
         base?.setScale(scale)
         top?.setScale(scale)
         
-        base?.position = CGPoint(x: 0, y: 0)
-        top?.position = CGPoint(x: 0, y: 0)
-        
         // Add base and turret as children to the TurretTower
         if let base = base, let top = top {
             addChild(base)
             addChild(top)
         }
-        
-       
-        self.position = centre
-        
-        
+   
         print(centre)
        
     }
