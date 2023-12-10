@@ -10,24 +10,29 @@ import SpriteKit
 import GameplayKit
 
 class Enemy: SKSpriteNode {
-    var imageFile: String = "monster101"
-    var health: Int = 100
-    var moveSpeed: CGFloat = 500.0
-    var currentWaypoint: Int = 1
-    //var currentPosition: CGPoint?
     var path: [SKNode]
+    var imageFile: String = ""
+    var health: Int = 0
+    var moveSpeed: CGFloat = 0
+    
+    var currentWaypoint: Int = 1
     var currentNodeIndex: Int = 0
 
     
-    init(path: [SKNode]) {
+    init(path: [SKNode], imageFile: String, health: Int, moveSpeed: CGFloat) {
+        self.imageFile = imageFile
+        self.health = health
+        self.moveSpeed = moveSpeed
+        
         let texture = SKTexture(imageNamed: imageFile)
         self.path = path
         super.init(texture: texture, color: .clear, size: texture.size())
         
         
         self.position = getStartPos() ?? CGPointZero
-        
         self.zPosition = 2.0
+        
+        animateWalk()
         
     }
     
@@ -45,6 +50,36 @@ class Enemy: SKSpriteNode {
                 return nil
             }
         }
+    
+    func loadWalkTextures() -> [SKTexture] {
+        var textures: [SKTexture] = []
+        textures.append(SKTexture(imageNamed: imageFile))
+        for i in 1...3 {
+            let textureName = "\(imageFile)\(i)"
+            textures.append(SKTexture(imageNamed: textureName))
+        }
+        return textures
+    }
+    
+    func animateWalk() {
+        let textures = loadWalkTextures()
+        let animation = SKAction.animate(with: textures, timePerFrame: 0.1)
+        let walkAnimation = SKAction.repeatForever(animation)
+        self.run(walkAnimation)
+    }
+
+    func setSpriteDirection() {
+        let goal = path[currentWaypoint].position
+        let monster = position
+        //Checks if monsters position is right of their goal waypoint
+        if goal.x <= monster.x {
+            //Flip sprite left
+            self.xScale = -abs(self.xScale)
+        } else {
+            //Flip sprite right
+            self.xScale = abs(self.xScale)
+        }
+    }
     
     func takeDamage() {
         
@@ -78,6 +113,8 @@ class Enemy: SKSpriteNode {
             self.position.y -= min(amountToMove, self.position.y - goalPos.y)
         }
 
+        setSpriteDirection()
+        
         // Check if the enemy has reached the waypoint
         if self.position == goalPos {
             if currentWaypoint < path.count - 1 {

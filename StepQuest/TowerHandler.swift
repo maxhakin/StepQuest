@@ -24,6 +24,7 @@ class TowerHandler {
             let newTower = TurretTower(placeNode: place, levelString: levelString)
             towers.append(newTower)
             place.addChild(newTower)
+            print("tower placed")
         }
     }
     

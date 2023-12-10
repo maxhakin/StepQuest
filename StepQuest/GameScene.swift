@@ -14,25 +14,33 @@ class GameScene: SKScene {
     private var initialTouchLocation: CGPoint?
     private var terrainMap: SKTileMapNode?
     private var gameCam: SKCameraNode?
-    private var walkPath: [SKNode] = []
+    var walkPath: [SKNode] = []
+    var flyPath: [SKNode] = []
     private var towerPlaces: [SKShapeNode] = []
-    private var enemy: Enemy?
+    
     private var lastUpdateTime: TimeInterval = 0
     private var tapRecogniser: UITapGestureRecognizer?
     private var towerHandler: TowerHandler?
+    private var enemyHandler: EnemyHandler?
     
     override func didMove(to view: SKView) {
         loadTileMap()
         loadWalkPath()
+        loadFlyPath()
         loadTowerPlaces()
         tapRecogniser = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapRecogniser!)
-        self.enemy = Enemy(path: walkPath)
-        addChild(self.enemy!)
+        
         self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode
         self.camera = gameCam
         self.towerHandler = TowerHandler(gameScene: self)
+        self.enemyHandler = EnemyHandler(gameScene: self)
         
+        enemyHandler?.makeAlien()
+        enemyHandler?.makeCrab()
+        enemyHandler?.makeWings()
+        enemyHandler?.makeStomper()
+        enemyHandler?.makeNerd()
         super.didMove(to: view)
         
     }
@@ -48,6 +56,15 @@ class GameScene: SKScene {
     func loadWalkPath() {
         walkPath = self["walkPath"]
         walkPath.sort { (node1, node2) in
+            let waypoint1 = node1.userData?["waypoint"] as? Int ?? Int.max
+            let waypoint2 = node2.userData?["waypoint"] as? Int ?? Int.max
+            return waypoint1 < waypoint2
+        }
+    }
+    
+    func loadFlyPath() {
+        flyPath = self["flyPath"]
+        flyPath.sort { (node1, node2) in
             let waypoint1 = node1.userData?["waypoint"] as? Int ?? Int.max
             let waypoint2 = node2.userData?["waypoint"] as? Int ?? Int.max
             return waypoint1 < waypoint2
@@ -101,7 +118,7 @@ class GameScene: SKScene {
         lastUpdateTime = currentTime
         
         // Call the move function with deltaTime
-        enemy?.move(deltaTime: deltaTime)
+        enemyHandler?.updateEnemies(deltaTime: deltaTime)
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
