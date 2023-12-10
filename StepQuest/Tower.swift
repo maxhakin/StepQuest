@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 class Tower: SKNode {
-    var range: Float = 0
+    var range: CGFloat = 0
     var attackSpeed: Float = 0
     var damage: Int = 0
     
@@ -19,13 +19,12 @@ class Tower: SKNode {
     var top: SKSpriteNode?
     
     var towerType: String = ""
-    var placeNode: SKShapeNode?
     var towerLocation: CGPoint?
-    var enemy: Enemy?
+    var target: Enemy?
     
     var scale: CGFloat = 0.65
     
-    init(placeNode: SKShapeNode) {
+    override init() {
         super.init()
     }
     
@@ -37,14 +36,9 @@ class Tower: SKNode {
         
     //}
     
-    func makeTower(placeNode: SKShapeNode) {
+    func makeTower() {
         base = SKSpriteNode(imageNamed: baseImage)
         top = SKSpriteNode(imageNamed: topImage)
-        self.placeNode = placeNode
-        
-        let centreX = placeNode.frame.midX
-        let centreY = placeNode.frame.midY
-        let centre = CGPoint(x: centreX, y: centreY)
         
         base = SKSpriteNode(imageNamed: baseImage)
         top = SKSpriteNode(imageNamed: topImage)
@@ -61,7 +55,7 @@ class Tower: SKNode {
             addChild(top)
         }
    
-        print(centre)
+       // print(centre)
        
     }
     
@@ -70,24 +64,81 @@ class Tower: SKNode {
         
     }
     
-    func findTarget() {
+    func getTarget(enemies: [Enemy]) -> Enemy? {
+        var targetEnemy: Enemy?
+        var furthestWaypoint = -1
+        var closestDistance = CGFloat.infinity
+
+        for enemy in enemies {
+            let distance = distanceTo(enemy: enemy)
+            print(distance)
+            //Check if target is within range of the tower
+            if distance <= range {
+                let waypointIndex = enemy.currentWaypoint
+                let distanceIndex = enemy.getGoalDistance()
+                print("Enemy in range")
+                
+                if waypointIndex >= furthestWaypoint {
+                    furthestWaypoint = waypointIndex
+                    if closestDistance >= distanceIndex {
+                        targetEnemy = enemy
+                        print("target set")
+                    }
+                }
+            }
+        }
         
+        furthestWaypoint = -1
+        closestDistance = CGFloat.infinity
+        return targetEnemy
+    }
+    
+    func distanceTo(enemy: Enemy) -> CGFloat {
+        // Convert the tower's position to the scene's coordinate system
+        guard let scene = self.scene else { return CGFloat.infinity }
+        let towerPositionInScene = scene.convert(self.position, from: self.parent!)
+        
+        //print(towerPositionInScene)
+        
+        let dx = enemy.position.x - towerPositionInScene.x
+        let dy = enemy.position.y - towerPositionInScene.y
+        return sqrt(dx * dx + dy * dy)
     }
     
     func targetInRange() {
         
     }
     
-    func rotateTurret() {
+    func rotateTurret(enemies: [Enemy]) {
+        guard let targetEnemy = getTarget(enemies: enemies) else { return }
+        let turretAngle = angleToTarget(from: top!.position, to: targetEnemy.position)
+        top!.zRotation = turretAngle - .pi / 2
+    }
+    
+    func angleToTarget(from turretPosition: CGPoint, to targetPosition: CGPoint) -> CGFloat {
+        let deltaX = targetPosition.x - turretPosition.x
+        let deltaY = targetPosition.y - turretPosition.y
+        return atan2(deltaY, deltaX)
+    }
+    
+    func shortestAngleBetween(angle1: CGFloat, angle2: CGFloat) -> CGFloat {
+        var angle = (angle2 - angle1).truncatingRemainder(dividingBy: 2 * .pi)
         
+        //Check if angle is greater than half a circle, if so the path is shorter to rotate in the opposite direction 
+        if angle >= .pi {
+            angle -= 2 * .pi
+        } else if angle <= -.pi {
+            angle += 2 * .pi
+        }
+        return angle
     }
     
     func erase() {
         
     }
     
-    func update() {
-        
+    func update(enemies: [Enemy]) {
+        rotateTurret(enemies: enemies)
     }
     
     func render() {

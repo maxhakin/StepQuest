@@ -117,19 +117,20 @@ class GameScene: SKScene {
         // Update the last update time to the current time
         lastUpdateTime = currentTime
         
-        // Call the move function with deltaTime
+        // Update enemies and towers
         enemyHandler?.updateEnemies(deltaTime: deltaTime)
+        towerHandler?.update(enemies: enemyHandler!.enemies)
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         print("Tap handled")
         
         let viewLocation = recognizer.location(in: self.view)        
-        var sceneLocation = convertPoint(fromView: viewLocation)
+        let sceneLocation = convertPoint(fromView: viewLocation)
 
         let touchedNode = atPoint(sceneLocation)
 
-        if let touchedShapeNode = touchedNode as? SKShapeNode {
+        if touchedNode is SKShapeNode {
             for place in towerPlaces {
                     if place.contains(sceneLocation) {
                         

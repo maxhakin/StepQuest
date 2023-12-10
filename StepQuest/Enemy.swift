@@ -81,6 +81,15 @@ class Enemy: SKSpriteNode {
         }
     }
     
+    func getGoalDistance() -> CGFloat {
+        let point1 = self.position
+        let point2 = path[currentWaypoint].position
+        
+        let dx = point1.x - point2.x
+        let dy = point1.y - point2.y
+        return sqrt(dx * dx + dy * dy)
+    }
+    
     func takeDamage() {
         
     }

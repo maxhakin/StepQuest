@@ -35,5 +35,11 @@ class TowerHandler {
             return false
         }
     }
+    
+    func update(enemies: [Enemy]) {
+        for tower in towers {
+            tower.update(enemies: enemies)
+        }
+    }
 
 }
