@@ -40,23 +40,15 @@ class Tower: SKNode {
         base = SKSpriteNode(imageNamed: baseImage)
         top = SKSpriteNode(imageNamed: topImage)
         
-        base = SKSpriteNode(imageNamed: baseImage)
-        top = SKSpriteNode(imageNamed: topImage)
-        
         base?.zPosition = 2
         top?.zPosition = 3
         
         base?.setScale(scale)
         top?.setScale(scale)
         
-        // Add base and turret as children to the TurretTower
-        if let base = base, let top = top {
-            addChild(base)
-            addChild(top)
-        }
-   
-       // print(centre)
-       
+        addChild(base!)
+        addChild(top!)
+    
     }
     
     
@@ -76,13 +68,14 @@ class Tower: SKNode {
             if distance <= range {
                 let waypointIndex = enemy.currentWaypoint
                 let distanceIndex = enemy.getGoalDistance()
-                print("Enemy in range")
+                //print("Enemy in range")
                 
+                //Check if enemy is further along the path than other enemies, set the enemy as target enemy if it is
                 if waypointIndex >= furthestWaypoint {
                     furthestWaypoint = waypointIndex
                     if closestDistance >= distanceIndex {
                         targetEnemy = enemy
-                        print("target set")
+                        print("target set", (targetEnemy?.position.x)!, (targetEnemy?.position.y)!)
                     }
                 }
             }
@@ -100,6 +93,7 @@ class Tower: SKNode {
         
         //print(towerPositionInScene)
         
+        //Calculate the distance to the enemy using pythagoras thereom
         let dx = enemy.position.x - towerPositionInScene.x
         let dy = enemy.position.y - towerPositionInScene.y
         return sqrt(dx * dx + dy * dy)
@@ -137,7 +131,7 @@ class Tower: SKNode {
         
     }
     
-    func update(enemies: [Enemy]) {
+    func update(enemies: [Enemy], deltaTime: TimeInterval) {
         rotateTurret(enemies: enemies)
     }
     

@@ -36,9 +36,9 @@ class TowerHandler {
         }
     }
     
-    func update(enemies: [Enemy]) {
+    func update(enemies: [Enemy], deltaTime: TimeInterval) {
         for tower in towers {
-            tower.update(enemies: enemies)
+            tower.update(enemies: enemies, deltaTime: deltaTime)
         }
     }
 
