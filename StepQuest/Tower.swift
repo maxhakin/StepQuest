@@ -12,6 +12,7 @@ class Tower: SKNode {
     var range: CGFloat = 0
     var attackSpeed: Float = 0
     var damage: Int = 0
+    var rotationSpeed: CGFloat = 2
     
     var baseImage: String = ""
     var topImage: String = ""
@@ -24,8 +25,13 @@ class Tower: SKNode {
     
     var scale: CGFloat = 0.65
     
+    var rangeCircle: SKShapeNode?
+    
+    
+    
     override init() {
         super.init()
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,6 +56,19 @@ class Tower: SKNode {
         addChild(top!)
     
     }
+    
+    func createRangeCircle() {
+            rangeCircle?.removeFromParent() // Remove existing circle if any
+
+            let circle = SKShapeNode(circleOfRadius: range)
+            circle.fillColor = SKColor.blue.withAlphaComponent(0.3) // Semi-transparent blue
+            circle.strokeColor = SKColor.blue
+            circle.lineWidth = 1
+            circle.zPosition = 2  // Ensure it's below the turret
+            addChild(circle)
+
+            rangeCircle = circle
+        }
     
     
     func upgrade() {
@@ -103,10 +122,15 @@ class Tower: SKNode {
         
     }
     
-    func rotateTurret(enemies: [Enemy]) {
+    func rotateTurret(enemies: [Enemy], deltaTime: TimeInterval) {
         guard let targetEnemy = getTarget(enemies: enemies) else { return }
-        let turretAngle = angleToTarget(from: top!.position, to: targetEnemy.position)
-        top!.zRotation = turretAngle - .pi / 2
+        let turretPos = parent!.convert(self.position, to: scene!)
+        let turretAngle = angleToTarget(from: turretPos, to: targetEnemy.position)
+        let currentAngle = top!.zRotation
+        let angleDifference = shortestAngleBetween(angle1: currentAngle, angle2: turretAngle)
+            
+        // Rotate the turret by a fraction of the difference, based on rotationSpeed and deltaTime
+        top!.zRotation += angleDifference * CGFloat(rotationSpeed) * CGFloat(deltaTime)
     }
     
     func angleToTarget(from turretPosition: CGPoint, to targetPosition: CGPoint) -> CGFloat {
@@ -132,7 +156,7 @@ class Tower: SKNode {
     }
     
     func update(enemies: [Enemy], deltaTime: TimeInterval) {
-        rotateTurret(enemies: enemies)
+        rotateTurret(enemies: enemies, deltaTime: deltaTime)
     }
     
     func render() {

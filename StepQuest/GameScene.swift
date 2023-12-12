@@ -119,7 +119,7 @@ class GameScene: SKScene {
         
         // Update enemies and towers
         enemyHandler?.updateEnemies(deltaTime: deltaTime)
-        towerHandler?.update(enemies: enemyHandler!.enemies)
+        towerHandler?.update(enemies: enemyHandler!.enemies, deltaTime: deltaTime)
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {

@@ -17,11 +17,11 @@ class TurretTower: Tower {
         var stats: (range: CGFloat, attackSpeed: Float, damage: Int, baseImage: String, topImage: String) {
             switch self {
                 case .level1:
-                    return (800, 50, 10, "towerBase1", "turretGun1")
+                    return (400, 50, 10, "towerBase1", "turretGun1")
                 case .level2:
-                    return (1500, 75, 20, "towerBase2", "turretGun2")
+                    return (500, 75, 20, "towerBase2", "turretGun2")
                 case .level3:
-                    return (2000, 100, 30, "towerBase3", "turretGun3")
+                    return (600, 100, 30, "towerBase3", "turretGun3")
             }
         }
     }
@@ -51,6 +51,7 @@ class TurretTower: Tower {
         topImage = stats.topImage
         
         makeTower()
+        createRangeCircle()
         
         
     }
