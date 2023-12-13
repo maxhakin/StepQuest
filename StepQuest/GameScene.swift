@@ -22,6 +22,7 @@ class GameScene: SKScene {
     private var tapRecogniser: UITapGestureRecognizer?
     private var towerHandler: TowerHandler?
     private var enemyHandler: EnemyHandler?
+    private var projectileHandler: ProjectileHandler?
     
     override func didMove(to view: SKView) {
         loadTileMap()
@@ -33,8 +34,9 @@ class GameScene: SKScene {
         
         self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode
         self.camera = gameCam
-        self.towerHandler = TowerHandler(gameScene: self)
         self.enemyHandler = EnemyHandler(gameScene: self)
+        self.projectileHandler = ProjectileHandler(gameScene: self)
+        self.towerHandler = TowerHandler(gameScene: self, projectileHandler: projectileHandler!)
         
         enemyHandler?.makeAlien()
         enemyHandler?.makeCrab()
@@ -120,6 +122,7 @@ class GameScene: SKScene {
         // Update enemies and towers
         enemyHandler?.updateEnemies(deltaTime: deltaTime)
         towerHandler?.update(enemies: enemyHandler!.enemies, deltaTime: deltaTime)
+        projectileHandler?.update(deltaTime: deltaTime)
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
@@ -134,7 +137,7 @@ class GameScene: SKScene {
             for place in towerPlaces {
                     if place.contains(sceneLocation) {
                         
-                        towerHandler?.addTurretTower(at: place, levelString: "level1")
+                        towerHandler?.addTurretTower(at: place, levelString: "level1", enemies: enemyHandler!.enemies)
                         break
                         }
                     }

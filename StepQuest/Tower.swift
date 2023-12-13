@@ -10,26 +10,30 @@ import SpriteKit
 
 class Tower: SKNode {
     var range: CGFloat = 0
-    var attackSpeed: Float = 0
+    var attackSpeed: TimeInterval = 0
     var damage: Int = 0
-    var rotationSpeed: CGFloat = 2
+    var rotationSpeed: Float = 2
     
     var baseImage: String = ""
     var topImage: String = ""
     var base: SKSpriteNode?
     var top: SKSpriteNode?
+    var projectileType: String?
     
     var towerType: String = ""
     var towerLocation: CGPoint?
     var target: Enemy?
+    var enemies: [Enemy]
     
     var scale: CGFloat = 0.65
+    var lastAttackTime: TimeInterval = 0
     
     var rangeCircle: SKShapeNode?
     
     
     
-    override init() {
+    init(enemies: [Enemy]) {
+        self.enemies = enemies
         super.init()
         
     }
@@ -38,9 +42,20 @@ class Tower: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //func attack(target: enemy) {
-        
-    //}
+    func attack(projectileHandler: ProjectileHandler) {
+        // Check if enough time has passed since the last attack
+        let currentTime = CACurrentMediaTime()
+        if currentTime - lastAttackTime >= attackSpeed {
+            // Find a target enemy in range
+            if let targetEnemy = getTarget() {
+                // Create a projectile and add it to the handler
+                projectileHandler.makeProjectile(projectileType: projectileType!, startLocation: getPositionInScene(), target: targetEnemy)
+                print("make projectile")
+                // Update the last attack time
+                lastAttackTime = currentTime
+            }
+        }
+    }
     
     func makeTower() {
         base = SKSpriteNode(imageNamed: baseImage)
@@ -58,31 +73,31 @@ class Tower: SKNode {
     }
     
     func createRangeCircle() {
-            rangeCircle?.removeFromParent() // Remove existing circle if any
+        rangeCircle?.removeFromParent() // Remove existing circle if any
 
-            let circle = SKShapeNode(circleOfRadius: range)
-            circle.fillColor = SKColor.blue.withAlphaComponent(0.3) // Semi-transparent blue
-            circle.strokeColor = SKColor.blue
-            circle.lineWidth = 1
-            circle.zPosition = 2  // Ensure it's below the turret
-            addChild(circle)
+        let circle = SKShapeNode(circleOfRadius: range)
+        circle.fillColor = SKColor.blue.withAlphaComponent(0.3) // Semi-transparent blue
+        circle.strokeColor = SKColor.blue
+        circle.lineWidth = 1
+        circle.zPosition = 2  // Ensure it's below the turret
+        addChild(circle)
 
-            rangeCircle = circle
-        }
+        rangeCircle = circle
+    }
     
     
     func upgrade() {
         
     }
     
-    func getTarget(enemies: [Enemy]) -> Enemy? {
+    func getTarget() -> Enemy? {
         var targetEnemy: Enemy?
         var furthestWaypoint = -1
         var closestDistance = CGFloat.infinity
 
         for enemy in enemies {
             let distance = distanceTo(enemy: enemy)
-            print(distance)
+            //print(distance)
             //Check if target is within range of the tower
             if distance <= range {
                 let waypointIndex = enemy.currentWaypoint
@@ -94,7 +109,7 @@ class Tower: SKNode {
                     furthestWaypoint = waypointIndex
                     if closestDistance >= distanceIndex {
                         targetEnemy = enemy
-                        print("target set", (targetEnemy?.position.x)!, (targetEnemy?.position.y)!)
+                        //print("target set", (targetEnemy?.position.x)!, (targetEnemy?.position.y)!)
                     }
                 }
             }
@@ -106,11 +121,7 @@ class Tower: SKNode {
     }
     
     func distanceTo(enemy: Enemy) -> CGFloat {
-        // Convert the tower's position to the scene's coordinate system
-        guard let scene = self.scene else { return CGFloat.infinity }
-        let towerPositionInScene = scene.convert(self.position, from: self.parent!)
-        
-        //print(towerPositionInScene)
+        let towerPositionInScene = getPositionInScene()
         
         //Calculate the distance to the enemy using pythagoras thereom
         let dx = enemy.position.x - towerPositionInScene.x
@@ -118,12 +129,15 @@ class Tower: SKNode {
         return sqrt(dx * dx + dy * dy)
     }
     
-    func targetInRange() {
-        
+    func getPositionInScene() -> CGPoint {
+        // Convert the tower's position to the scene's coordinate system
+        guard let scene = self.scene else { return CGPoint.zero }
+        let towerPositionInScene = scene.convert(self.position, from: self.parent!)
+        return towerPositionInScene
     }
     
-    func rotateTurret(enemies: [Enemy], deltaTime: TimeInterval) {
-        guard let targetEnemy = getTarget(enemies: enemies) else { return }
+    func rotateTurret(deltaTime: TimeInterval) {
+        guard let targetEnemy = getTarget() else { return }
         let turretPos = parent!.convert(self.position, to: scene!)
         let turretAngle = angleToTarget(from: turretPos, to: targetEnemy.position)
         let currentAngle = top!.zRotation
@@ -155,8 +169,9 @@ class Tower: SKNode {
         
     }
     
-    func update(enemies: [Enemy], deltaTime: TimeInterval) {
-        rotateTurret(enemies: enemies, deltaTime: deltaTime)
+    func update(enemies: [Enemy], deltaTime: TimeInterval, projectileHandler: ProjectileHandler) {
+        rotateTurret(deltaTime: deltaTime)
+        attack(projectileHandler: projectileHandler)
     }
     
     func render() {

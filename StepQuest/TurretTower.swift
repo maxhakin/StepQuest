@@ -14,14 +14,14 @@ class TurretTower: Tower {
         case level2
         case level3
 
-        var stats: (range: CGFloat, attackSpeed: Float, damage: Int, baseImage: String, topImage: String) {
+        var stats: (range: CGFloat, attackSpeed: TimeInterval, damage: Int, baseImage: String, topImage: String, projectileType: String) {
             switch self {
                 case .level1:
-                    return (400, 50, 10, "towerBase1", "turretGun1")
+                    return (400, 10, 10, "towerBase1", "turretGun1", "bullet1")
                 case .level2:
-                    return (500, 75, 20, "towerBase2", "turretGun2")
+                    return (500, 7, 20, "towerBase2", "turretGun2", "bullet2")
                 case .level3:
-                    return (600, 100, 30, "towerBase3", "turretGun3")
+                    return (600, 5, 30, "towerBase3", "turretGun3", "bullet3")
             }
         }
     }
@@ -29,7 +29,7 @@ class TurretTower: Tower {
     
     
     
-    init(placeNode: SKShapeNode, levelString: String) {
+    init(levelString: String, enemies: [Enemy]) {
         switch levelString {
             case "level1":
                 level = .level1
@@ -42,13 +42,14 @@ class TurretTower: Tower {
         }
         
         let stats = level.stats
-        super.init()
+        super.init(enemies: enemies)
         
         range = stats.range
         attackSpeed = stats.attackSpeed
         damage = stats.damage
         baseImage = stats.baseImage
         topImage = stats.topImage
+        projectileType = stats.projectileType
         
         makeTower()
         createRangeCircle()

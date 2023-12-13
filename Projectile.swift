@@ -13,7 +13,7 @@ class Projectile: SKNode {
     var imageFile: String
     var damage: Int
     var damageRadius: CGFloat
-    var movingSpeed: CGFloat
+    var moveSpeed: CGFloat
     var projImage: SKSpriteNode
     
     var target: Enemy
@@ -27,7 +27,7 @@ class Projectile: SKNode {
         case bomb2
         case bomb3
 
-        var stats: (imageFile: String, damage: Int, damageRadius: CGFloat, movingSpeed: CGFloat) {
+        var stats: (imageFile: String, damage: Int, damageRadius: CGFloat, moveSpeed: CGFloat) {
             switch self {
                 case .bullet1:
                     return ("bullet1", 30, 20, 200)
@@ -70,12 +70,18 @@ class Projectile: SKNode {
         imageFile = stats.imageFile
         damage = stats.damage
         damageRadius = stats.damageRadius
-        movingSpeed = stats.movingSpeed
+        moveSpeed = stats.moveSpeed
         projImage = SKSpriteNode(imageNamed: imageFile)
+        
+        self.target = target
+        
         
         super.init()
         
+        self.zPosition = 4
         addChild(projImage)
+        
+        print("Projectile built")
         
     }
     
@@ -83,8 +89,40 @@ class Projectile: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func makeProjectile() {
+    func update() {
         
     }
     
+    func damageEnemy() {
+        target.takeDamage(damage: damage)
+    }
+    
+    func move(deltaTime: TimeInterval) {
+        // Calculate the distance between the current position and the target
+        let dx = target.position.x - position.x
+        let dy = target.position.y - position.y
+        let distance = hypot(dx, dy)
+
+        // Calculate the angle between current position and target position
+        let angle = atan2(dy, dx)
+        
+        // Rotate projectile to face target
+        projImage.zRotation = angle + .pi / 2
+
+        // Calculate the x and y components of the velocity
+        let velocityX = cos(angle) * moveSpeed
+        let velocityY = sin(angle) * moveSpeed
+
+        // Move the projectile
+        let deltaX = velocityX * CGFloat(deltaTime)
+        let deltaY = velocityY * CGFloat(deltaTime)
+        position.x += deltaX
+        position.y += deltaY
+
+        // Check if the projectile has reached the target
+        if distance <= moveSpeed * CGFloat(deltaTime) {
+            damageEnemy()
+            // You can also remove the projectile at this point
+        }
+    }
 }

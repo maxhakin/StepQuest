@@ -15,10 +15,9 @@ class ProjectileHandler {
 
     init(gameScene: GameScene) {
         self.gameScene = gameScene
-        towerPlaces = gameScene.getTowerPlaces()
     }
 
-    func addProjectile(projectileType: String, startLocation: CGPoint, target: Enemy) {
+    func makeProjectile(projectileType: String, startLocation: CGPoint, target: Enemy) {
         let projectile = Projectile(projectileType: projectileType, target: target)
         projectiles.append(projectile)
         projectile.position = startLocation
@@ -26,17 +25,9 @@ class ProjectileHandler {
         print("Projectile Made")
     }
     
-    func isTower(at place: SKShapeNode) -> Bool {
-        if place.children.count > 0 {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func update(enemies: [Enemy], deltaTime: TimeInterval) {
-        for tower in towers {
-            tower.update(enemies: enemies, deltaTime: deltaTime)
+    func update(deltaTime: TimeInterval) {
+        for projectile in projectiles {
+            projectile.move(deltaTime: deltaTime)
         }
     }
 

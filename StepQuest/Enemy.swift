@@ -90,11 +90,22 @@ class Enemy: SKSpriteNode {
         return sqrt(dx * dx + dy * dy)
     }
     
-    func takeDamage() {
-        
+    func takeDamage(damage: Int) {
+        health -= damage
+        if health <= 0 {
+            die()
+        } else {
+            // Make enemy flash red takin damage
+            let originalColor = self.color
+            let redAction = SKAction.colorize(with: .red, colorBlendFactor: 1.0, duration: 0.1)
+            let originalColorAction = SKAction.colorize(with: originalColor, colorBlendFactor: 0.0, duration: 0.1)
+            let flashSequence = SKAction.sequence([redAction, originalColorAction])
+            self.run(flashSequence)
+        }
     }
     
     func die() {
+        self.removeFromParent()
         
     }
     
@@ -132,6 +143,10 @@ class Enemy: SKSpriteNode {
             
             
         }
+    }
+    
+    deinit {
+        print("Enemy instance is being deallocated")
     }
 }
 
