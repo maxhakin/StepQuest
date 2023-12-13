@@ -52,13 +52,14 @@ class EnemyHandler {
     }
     
     func updateEnemies(deltaTime: TimeInterval) {
-        var index = 0
+        var index = -1
         for enemy in enemies {
             index += 1
             // Check if instacne of enemy has a parent
             if enemy.parent == nil {
                 // Enemy has been removed from the scene, so remove it from the array
                 enemies.remove(at: index)
+                print("enemy removed from array")
             } else {
                 enemy.move(deltaTime: deltaTime)
             }

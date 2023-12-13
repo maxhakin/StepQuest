@@ -22,7 +22,7 @@ class Tower: SKNode {
     
     var towerType: String = ""
     var towerLocation: CGPoint?
-    var target: Enemy?
+    //var target: Enemy?
     var enemies: [Enemy]
     
     var scale: CGFloat = 0.65
@@ -50,7 +50,6 @@ class Tower: SKNode {
             if let targetEnemy = getTarget() {
                 // Create a projectile and add it to the handler
                 projectileHandler.makeProjectile(projectileType: projectileType!, startLocation: getPositionInScene(), target: targetEnemy)
-                print("make projectile")
                 // Update the last attack time
                 lastAttackTime = currentTime
             }

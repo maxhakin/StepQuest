@@ -75,13 +75,10 @@ class Projectile: SKNode {
         
         self.target = target
         
-        
         super.init()
         
         self.zPosition = 4
         addChild(projImage)
-        
-        print("Projectile built")
         
     }
     
@@ -122,7 +119,11 @@ class Projectile: SKNode {
         // Check if the projectile has reached the target
         if distance <= moveSpeed * CGFloat(deltaTime) {
             damageEnemy()
-            // You can also remove the projectile at this point
+            removeFromParent()
         }
+    }
+    
+    deinit {
+        print("Projectile has been removed")
     }
 }

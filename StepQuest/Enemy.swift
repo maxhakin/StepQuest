@@ -105,8 +105,7 @@ class Enemy: SKSpriteNode {
     }
     
     func die() {
-        self.removeFromParent()
-        
+        removeFromParent()
     }
     
     func initPos() {
@@ -139,7 +138,10 @@ class Enemy: SKSpriteNode {
         if self.position == goalPos {
             if currentWaypoint < path.count - 1 {
                 currentWaypoint += 1  // Move to the next waypoint
-            } else {return}
+            } else {
+                removeFromParent()
+                // Implement code later to end level/ or something
+            }
             
             
         }
