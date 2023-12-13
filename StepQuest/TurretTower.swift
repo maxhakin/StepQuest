@@ -29,7 +29,7 @@ class TurretTower: Tower {
     
     
     
-    init(levelString: String, enemies: [Enemy]) {
+    init(levelString: String, enemyHandler: EnemyHandler) {
         switch levelString {
             case "level1":
                 level = .level1
@@ -42,7 +42,7 @@ class TurretTower: Tower {
         }
         
         let stats = level.stats
-        super.init(enemies: enemies)
+        super.init(enemyHandler: enemyHandler)
         
         range = stats.range
         attackSpeed = stats.attackSpeed

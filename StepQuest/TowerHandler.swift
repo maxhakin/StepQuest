@@ -14,17 +14,19 @@ class TowerHandler {
     var towers: [Tower] = []
     weak var gameScene: GameScene?
     var projectileHandler: ProjectileHandler
+    var enemyHandler: EnemyHandler
 
-    init(gameScene: GameScene, projectileHandler: ProjectileHandler) {
+    init(gameScene: GameScene) {
         self.gameScene = gameScene
         towerPlaces = gameScene.getTowerPlaces()
         
-        self.projectileHandler = projectileHandler
+        self.projectileHandler = gameScene.projectileHandler!
+        self.enemyHandler = gameScene.enemyHandler!
     }
 
-    func addTurretTower(at place: SKShapeNode, levelString: String, enemies: [Enemy]) {
+    func addTurretTower(at place: SKShapeNode, levelString: String) {
         if !isTower(at: place) {
-            let newTower = TurretTower(levelString: levelString, enemies: enemies)
+            let newTower = TurretTower(levelString: levelString, enemyHandler: enemyHandler)
             towers.append(newTower)
             place.addChild(newTower)
             print("tower placed")
@@ -39,9 +41,9 @@ class TowerHandler {
         }
     }
     
-    func update(enemies: [Enemy], deltaTime: TimeInterval) {
+    func update(deltaTime: TimeInterval) {
         for tower in towers {
-            tower.update(enemies: enemies, deltaTime: deltaTime, projectileHandler: projectileHandler)
+            tower.update(deltaTime: deltaTime, projectileHandler: projectileHandler)
         }
     }
 

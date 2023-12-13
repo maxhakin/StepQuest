@@ -23,7 +23,7 @@ class Tower: SKNode {
     var towerType: String = ""
     var towerLocation: CGPoint?
     //var target: Enemy?
-    var enemies: [Enemy]
+    var enemyHandler: EnemyHandler
     
     var scale: CGFloat = 0.65
     var lastAttackTime: TimeInterval = 0
@@ -32,8 +32,8 @@ class Tower: SKNode {
     
     
     
-    init(enemies: [Enemy]) {
-        self.enemies = enemies
+    init(enemyHandler: EnemyHandler) {
+        self.enemyHandler = enemyHandler
         super.init()
         
     }
@@ -94,7 +94,7 @@ class Tower: SKNode {
         var furthestWaypoint = -1
         var closestDistance = CGFloat.infinity
 
-        for enemy in enemies {
+        for enemy in enemyHandler.enemies {
             let distance = distanceTo(enemy: enemy)
             //print(distance)
             //Check if target is within range of the tower
@@ -168,7 +168,7 @@ class Tower: SKNode {
         
     }
     
-    func update(enemies: [Enemy], deltaTime: TimeInterval, projectileHandler: ProjectileHandler) {
+    func update(deltaTime: TimeInterval, projectileHandler: ProjectileHandler) {
         rotateTurret(deltaTime: deltaTime)
         attack(projectileHandler: projectileHandler)
     }
