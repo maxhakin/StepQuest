@@ -22,7 +22,6 @@ class Tower: SKNode {
     
     var towerType: String = ""
     var towerLocation: CGPoint?
-    //var target: Enemy?
     var enemyHandler: EnemyHandler
     
     var scale: CGFloat = 0.65

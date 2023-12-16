@@ -10,18 +10,18 @@ import SpriteKit
 
 class TurretTower: Tower {
     enum TowerLevel {
-        case level1
-        case level2
-        case level3
+        case turret1
+        case turret2
+        case turret3
 
-        var stats: (range: CGFloat, attackSpeed: TimeInterval, damage: Int, baseImage: String, topImage: String, projectileType: String) {
+        var stats: (range: CGFloat, attackSpeed: TimeInterval, damage: Int, baseImage: String, topImage: String, projectileType: String, towerType: String) {
             switch self {
-                case .level1:
-                    return (400, 10, 10, "towerBase1", "turretGun1", "bullet1")
-                case .level2:
-                    return (500, 7, 20, "towerBase2", "turretGun2", "bullet2")
-                case .level3:
-                    return (600, 5, 30, "towerBase3", "turretGun3", "bullet3")
+                case .turret1:
+                    return (400, 10, 10, "towerBase1", "turretGun1", "bullet1", "turret1")
+                case .turret2:
+                    return (500, 7, 20, "towerBase2", "turretGun2", "bullet1", "turret2")
+                case .turret3:
+                    return (600, 5, 30, "towerBase3", "turretGun3", "bullet2", "turret3")
             }
         }
     }
@@ -31,14 +31,14 @@ class TurretTower: Tower {
     
     init(levelString: String, enemyHandler: EnemyHandler) {
         switch levelString {
-            case "level1":
-                level = .level1
-            case "level2":
-                level = .level2
-            case "level3":
-                level = .level3
+            case "turret1":
+                level = .turret1
+            case "turret2":
+                level = .turret2
+            case "turret3":
+                level = .turret3
             default:
-                level = .level1
+                level = .turret1
         }
         
         let stats = level.stats
@@ -50,6 +50,7 @@ class TurretTower: Tower {
         baseImage = stats.baseImage
         topImage = stats.topImage
         projectileType = stats.projectileType
+        towerType = stats.towerType
         
         makeTower()
         createRangeCircle()

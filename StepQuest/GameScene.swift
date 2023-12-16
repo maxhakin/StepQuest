@@ -17,6 +17,7 @@ class GameScene: SKScene {
     var walkPath: [SKNode] = []
     var flyPath: [SKNode] = []
     private var towerPlaces: [SKShapeNode] = []
+    //private var towerMenu: TowerMenu?
     
     private var lastUpdateTime: TimeInterval = 0
     private var tapRecogniser: UITapGestureRecognizer?
@@ -135,15 +136,29 @@ class GameScene: SKScene {
 
         if touchedNode is SKShapeNode {
             for place in towerPlaces {
-                    if place.contains(sceneLocation) {
-                        
-                        towerHandler?.addTurretTower(at: place, levelString: "level1")
-                        break
+                if place.contains(sceneLocation) {
+                    if place.children.isEmpty {
+                        let towerMenu = TowerMenu(menuType: "initial")
+                        print("Initial menu made")
+                        addChild(towerMenu)
+                    } else {
+                        // Assuming shapeNode is your SKShapeNode instance
+                        for child in place.children {
+                            if let tower = child as? TurretTower {
+                                let towerType = tower.towerType
+                                let towerMenu = TowerMenu(menuType: towerType)
+                                addChild(towerMenu)
+                            }
                         }
+
                     }
-        }
-        
+                    towerHandler?.addTurretTower(at: place, levelString: "level1")
+                    break
+                }
+            }
         }
         
     }
+        
+}
 
