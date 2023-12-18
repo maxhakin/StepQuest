@@ -17,30 +17,38 @@ class TowerMenu: SKNode {
     
     var baseImage: String?
     var topImage: String?
+    var actionString: String?
     
-    init(menuType: String) {
+    var place: SKShapeNode?
+    
+    init(menuType: String, place: SKShapeNode) {
         super.init()
         self.position = position
+        self.place = place
         switch menuType {
         case "initial":
             createInitialMenu()
         case "turret1":
             baseImage = "towerBase2"
             topImage = "turretGun2"
+            actionString = "turret2"
             createUpgradeMenu()
         case "turret2":
             baseImage = "towerBase3"
             topImage = "turretGun3"
+            actionString = "turret3"
             createUpgradeMenu()
         case "turret3":
             createDeleteMenu()
         case "missile1":
             baseImage = "towerBase2"
             topImage = "turretMissile2"
+            actionString = "missile2"
             createUpgradeMenu()
         case "missile2":
             baseImage = "towerBase3"
             topImage = "turretMissile3"
+            actionString = "missile3"
             createUpgradeMenu()
         case "missile3":
             createDeleteMenu()
@@ -70,8 +78,8 @@ class TowerMenu: SKNode {
         let turret = mergeImages(baseImage: "towerBase1", topImage: "turretGun1")
         let missile = mergeImages(baseImage: "towerBase1", topImage: "turretMissile1")
         
-        bombTowerButton = TowerMenuButton(texture: missile, buttonText: "Missile Tower")
-        turretTowerButton = TowerMenuButton(texture: turret, buttonText: "Turret Tower")
+        bombTowerButton = TowerMenuButton(texture: missile, buttonText: "Missile Tower", actionString: "missile1")
+        turretTowerButton = TowerMenuButton(texture: turret, buttonText: "Turret Tower", actionString: "turret1")
         
         spaceButtons(button1: bombTowerButton!, button2: turretTowerButton!)
         
@@ -82,7 +90,7 @@ class TowerMenu: SKNode {
     func createUpgradeMenu() {
         let turret = mergeImages(baseImage: baseImage!, topImage: topImage!)
         
-        upgradeButton = TowerMenuButton(texture: turret, buttonText: "Upgrade")
+        upgradeButton = TowerMenuButton(texture: turret, buttonText: "Upgrade", actionString: actionString!)
         
         addChild(upgradeButton!)
         
@@ -95,7 +103,7 @@ class TowerMenu: SKNode {
     func createDeleteMenu() {
         let delete = SKTexture(imageNamed: "delete")
         
-        deleteButton = TowerMenuButton(texture: delete, buttonText: "Delete")
+        deleteButton = TowerMenuButton(texture: delete, buttonText: "Delete", actionString: "delete")
         
         addChild(deleteButton!)
     }

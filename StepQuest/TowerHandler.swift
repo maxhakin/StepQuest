@@ -33,6 +33,14 @@ class TowerHandler {
         }
     }
     
+    func upgradeTower(at place: SKShapeNode) {
+        
+    }
+    
+    func deleteTower(at place: SKShapeNode) {
+        
+    }
+    
     func isTower(at place: SKShapeNode) -> Bool {
         if place.children.count > 0 {
             return true

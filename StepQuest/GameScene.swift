@@ -17,7 +17,7 @@ class GameScene: SKScene {
     var walkPath: [SKNode] = []
     var flyPath: [SKNode] = []
     private var towerPlaces: [SKShapeNode] = []
-    //private var towerMenu: TowerMenu?
+    private var towerMenu: TowerMenu?
     
     private var lastUpdateTime: TimeInterval = 0
     private var tapRecogniser: UITapGestureRecognizer?
@@ -110,7 +110,40 @@ class GameScene: SKScene {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
             
     }
-        
+    
+    // Remove tower menu once its served its function
+    func clearTowerMenu() {
+        towerMenu!.removeFromParent()
+        towerMenu = nil
+    }
+    
+    func handleTowerMenuButtonTap(button: TowerMenuButton) {
+        let switcher = button.actionString
+        if let menu = button.parent as? TowerMenu {
+            let place = menu.place
+            
+            switch switcher {
+            case "turret1":
+                print("turret1 button pressed")
+                towerHandler?.addTurretTower(at: place!, levelString: "turret1")
+            case "turret2":
+                towerHandler?.upgradeTower(at: place!)
+            case "turret3":
+                towerHandler?.upgradeTower(at: place!)
+            case "missile1":
+                towerHandler?.addMissileTower(at: place!, levelString: "missile1")
+            case "missile2":
+                towerHandler?.upgradeTower(at: place!)
+            case "missile3":
+                towerHandler?.upgradeTower(at: place!)
+            case "delete":
+                towerHandler?.deleteTower(at: place!)
+            default:
+                return
+                
+            }
+        }
+    }
         
     override func update(_ currentTime: TimeInterval) {
         
@@ -127,33 +160,52 @@ class GameScene: SKScene {
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
-        print("Tap handled")
         
         let viewLocation = recognizer.location(in: self.view)        
         let sceneLocation = convertPoint(fromView: viewLocation)
 
         let touchedNode = atPoint(sceneLocation)
-
+        
+        // Check if a TowerMenu is active and if the tap is on one of its buttons
+        if let towerMenu = towerMenu {
+            for child in towerMenu.children {
+                if let button = child as? TowerMenuButton {
+                    let buttonLocation = convert(sceneLocation, to: towerMenu)
+                    if button.contains(buttonLocation) {
+                        print("Menu button pressed")
+                        handleTowerMenuButtonTap(button: button)
+                        clearTowerMenu()
+                        return
+                    }
+                }
+            }
+            clearTowerMenu()
+        }
+        
+        
+        // Iteratre through buildable spaces
         if touchedNode is SKShapeNode {
             for place in towerPlaces {
                 if place.contains(sceneLocation) {
+                    // Check if the buildable space has no children, if not, call the initial menu
                     if place.children.isEmpty {
-                        let towerMenu = TowerMenu(menuType: "initial")
+                        towerMenu = TowerMenu(menuType: "initial", place: place)
+                        towerMenu!.position = sceneLocation
                         print("Initial menu made")
-                        addChild(towerMenu)
+                        addChild(towerMenu!)
                     } else {
-                        // Assuming shapeNode is your SKShapeNode instance
+                        // If it does have children check what type of tower, call the relevant menu
                         for child in place.children {
                             if let tower = child as? TurretTower {
                                 let towerType = tower.towerType
-                                let towerMenu = TowerMenu(menuType: towerType)
-                                addChild(towerMenu)
+                                towerMenu = TowerMenu(menuType: towerType, place: place)
+                                addChild(towerMenu!)
                             }
                         }
 
                     }
-                    towerHandler?.addTurretTower(at: place, levelString: "level1")
-                    break
+                   // towerHandler?.addTurretTower(at: place, levelString: "level1")
+                   // break
                 }
             }
         }

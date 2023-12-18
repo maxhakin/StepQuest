@@ -11,9 +11,11 @@ import SpriteKit
 class TowerMenuButton: SKSpriteNode {
     private var buttonImage: SKSpriteNode
     private var buttonText: SKLabelNode
+    var actionString: String
     
-    init(texture: SKTexture, buttonText: String) {
+    init(texture: SKTexture, buttonText: String, actionString: String) {
         let buttonSize = CGSize(width: 200, height: 200)
+        self.actionString = actionString
         
         self.buttonImage = SKSpriteNode(texture: texture)
         self.buttonImage.size = CGSize(width: 180, height: 180) // Set your desired size
