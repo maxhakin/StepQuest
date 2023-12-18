@@ -26,9 +26,18 @@ class TowerHandler {
 
     func addTurretTower(at place: SKShapeNode, levelString: String) {
         if !isTower(at: place) {
-            let newTower = TurretTower(levelString: levelString, enemyHandler: enemyHandler)
-            towers.append(newTower)
-            place.addChild(newTower)
+            let turretTower = TurretTower(levelString: levelString, enemyHandler: enemyHandler)
+            towers.append(turretTower)
+            place.addChild(turretTower)
+            print("tower placed")
+        }
+    }
+    
+    func addMissileTower(at place: SKShapeNode, levelString: String) {
+        if !isTower(at: place) {
+            let missileTower = MissileTower(levelString: levelString, enemyHandler: enemyHandler)
+            towers.append(missileTower)
+            place.addChild(missileTower)
             print("tower placed")
         }
     }
