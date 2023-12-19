@@ -123,7 +123,7 @@ class TowerMenu: SKNode {
         parentNode.addChild(turretNode)
         
         // Determine the size needed to fit both nodes
-        let parentSize = CGSize(width: max(baseNode.size.width, turretNode.size.width), height: baseNode.size.height + turretNode.size.height)
+        let parentSize = CGSize(width: 128, height: 128)
 
         // Render the parent node to a texture
         let texture = SKView().texture(from: parentNode, crop: CGRect(origin: CGPoint(x: -parentSize.width / 2, y: -parentSize.height / 2), size: parentSize))!

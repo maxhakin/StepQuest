@@ -19,17 +19,17 @@ class TowerMenuButton: SKSpriteNode {
         
         self.buttonImage = SKSpriteNode(texture: texture)
         self.buttonImage.size = CGSize(width: 180, height: 180) // Set your desired size
-        self.buttonImage.position = CGPoint(x: 0, y: 30) // Position the image above the center
+        self.buttonImage.position = CGPoint(x: 0, y: 10) // Position the image above the center
         
         self.buttonText = SKLabelNode(text: buttonText)
         self.buttonText.fontName = "Arial"
-        self.buttonText.fontSize = 20
+        self.buttonText.fontSize = 30
         self.buttonText.fontColor = SKColor.white
         self.buttonText.verticalAlignmentMode = .center
-        self.buttonText.position = CGPoint(x: 0, y: -10) // Position the text below the image
+        self.buttonText.position = CGPoint(x: 0, y: -80) // Position the text below the image
         
         super.init(texture: nil, color: .lightGray, size: buttonSize)
-        alpha = 0.5
+        //alpha = 0.5
         
         zPosition = 5
         
