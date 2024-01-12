@@ -83,8 +83,8 @@ class Tower: SKNode {
     }
     
     
-    func upgrade() {
-        
+    func upgrade(upgradeType: String) {
+        print ("upgrade function called")
     }
     
     func getTowerType() -> String {
@@ -166,7 +166,7 @@ class Tower: SKNode {
         return angle
     }
     
-    func erase() {
+    func delete() {
         
     }
     
@@ -177,6 +177,10 @@ class Tower: SKNode {
     
     func render() {
         
+    }
+    
+    deinit {
+        print("Tower has been removed")
     }
     
     

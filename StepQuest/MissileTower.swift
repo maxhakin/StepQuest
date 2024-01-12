@@ -10,17 +10,17 @@ import SpriteKit
 
 class MissileTower: Tower {
     enum TowerLevel {
-        case turret1
-        case turret2
-        case turret3
+        case missile1
+        case missile2
+        case missile3
 
         var stats: (range: CGFloat, attackSpeed: TimeInterval, damage: Int, baseImage: String, topImage: String, projectileType: String, towerType: String) {
             switch self {
-                case .turret1:
+                case .missile1:
                     return (400, 10, 10, "towerBase1", "turretMissile1", "bomb1", "missile1")
-                case .turret2:
+                case .missile2:
                     return (500, 7, 20, "towerBase2", "turretMissile2", "bomb1", "missile2")
-                case .turret3:
+                case .missile3:
                     return (600, 5, 30, "towerBase3", "turretMissile3", "bomb2", "missile3")
             }
         }
@@ -31,14 +31,14 @@ class MissileTower: Tower {
     
     init(levelString: String, enemyHandler: EnemyHandler) {
         switch levelString {
-            case "turret1":
-                level = .turret1
-            case "turret2":
-                level = .turret2
-            case "turret3":
-                level = .turret3
+            case "missile1":
+                level = .missile1
+            case "missile2":
+                level = .missile2
+            case "missile3":
+                level = .missile3
             default:
-                level = .turret1
+                level = .missile1
         }
         
         let stats = level.stats

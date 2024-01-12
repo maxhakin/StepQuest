@@ -43,13 +43,29 @@ class TowerHandler {
     }
     
     func upgradeTower(at place: SKShapeNode) {
-        
+        if let index = getTower(at: place) {
+            let towerType = towers[index].towerType
+            deleteTower(at: place)
+            
+            if towerType == "turret1" {
+                addTurretTower(at: place, levelString: "turret2")
+            }
+            else if towerType == "turret2" {
+                addTurretTower(at: place, levelString: "turret3")
+            }
+            else if towerType == "missile1" {
+                addMissileTower(at: place, levelString: "missile2")
+            }
+            else if towerType == "missile2" {
+                addMissileTower(at: place, levelString: "missile3")
+            }
+        }
     }
     
     func deleteTower(at place: SKShapeNode) {
-        // Remove children from tower
-        place.removeAllChildren()
         if let index = getTower(at: place) {
+            // Remove children from tower
+            towers[index].removeAllChildren()
             // Remove the tower from the scene if necessary
             towers[index].removeFromParent()
             
@@ -60,7 +76,7 @@ class TowerHandler {
     
     func getTower(at place: SKShapeNode) -> Optional<Int> {
         // Find the index of the tower that matches the given node
-        return towers.firstIndex(where: { $0 === place })
+        return towers.firstIndex(where: { $0.parent === place })
     }
     
     func isTower(at place: SKShapeNode) -> Bool {
@@ -73,7 +89,9 @@ class TowerHandler {
     
     func update(deltaTime: TimeInterval) {
         for tower in towers {
-            tower.update(deltaTime: deltaTime, projectileHandler: projectileHandler)
+            if tower.parent != nil {
+                tower.update(deltaTime: deltaTime, projectileHandler: projectileHandler)
+            }
         }
     }
 
