@@ -122,9 +122,10 @@ class GameScene: SKScene {
         if let menu = button.parent as? TowerMenu {
             let place = menu.place
             
+            print(switcher)
+            
             switch switcher {
             case "turret1":
-                print("turret1 button pressed")
                 towerHandler?.addTurretTower(at: place!, levelString: "turret1")
             case "turret2":
                 towerHandler?.upgradeTower(at: place!)
@@ -161,9 +162,9 @@ class GameScene: SKScene {
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         
-        let viewLocation = recognizer.location(in: self.view)        
+        let viewLocation = recognizer.location(in: self.view)
         let sceneLocation = convertPoint(fromView: viewLocation)
-
+        
         let touchedNode = atPoint(sceneLocation)
         
         // Check if a TowerMenu is active and if the tap is on one of its buttons
@@ -185,6 +186,7 @@ class GameScene: SKScene {
         
         // Iteratre through buildable spaces
         if touchedNode is SKShapeNode {
+            print("skshapenode touched")
             for place in towerPlaces {
                 if place.contains(sceneLocation) {
                     // Check if the buildable space has no children, if not, call the initial menu
@@ -195,22 +197,41 @@ class GameScene: SKScene {
                         addChild(towerMenu!)
                     } else {
                         // If it does have children check what type of tower, call the relevant menu
-                        for child in place.children {
-                            if let tower = child as? TurretTower {
-                                let towerType = tower.towerType
-                                towerMenu = TowerMenu(menuType: towerType, place: place)
-                                addChild(towerMenu!)
-                            }
-                        }
-
+                        print("Checking child")
+                        let tower = place.childNode(withName: "newTower") as? Tower
+                        let towerType = tower?.getTowerType()
+                        towerMenu = TowerMenu(menuType: towerType!, place: place)
+                        addChild(towerMenu!)
                     }
-                   // towerHandler?.addTurretTower(at: place, levelString: "level1")
-                   // break
+                    
                 }
+                // towerHandler?.addTurretTower(at: place, levelString: "level1")
+                // break
             }
         }
         
+        // Check if touched node is exisiting tower, handle relevant menu
+        if let spriteNode = touchedNode as? SKSpriteNode {
+            // Attempt to safely cast the parent of the spriteNode to Tower
+            if let tower = spriteNode.parent as? Tower {
+                // Attempt to safely cast the parent of the tower to SKShapeNode
+                if let place = tower.parent as? SKShapeNode {
+                    
+                    let towerType = tower.getTowerType()
+                    towerMenu = TowerMenu(menuType: towerType, place: place)
+                    addChild(towerMenu!)
+                    
+                } else {
+                    print("Error: Place is nil")
+                }
+            } else {
+                print("Error: Tower is nil")
+            }
+        }
     }
-        
 }
+        
+
+        
+
 

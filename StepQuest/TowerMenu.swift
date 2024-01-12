@@ -69,8 +69,8 @@ class TowerMenu: SKNode {
         let totalWidth = button1.size.width + button2.size.width + buttonSpacing
 
         // Position the buttons side by side
-        button1.position = CGPoint(x: -totalWidth / 2 + bombTowerButton!.size.width / 2, y: 0)
-        button2.position = CGPoint(x: totalWidth / 2 - turretTowerButton!.size.width / 2, y: 0)
+        button1.position = CGPoint(x: -totalWidth / 2 + button1.size.width / 2, y: 0)
+        button2.position = CGPoint(x: totalWidth / 2 - button2.size.width / 2, y: 0)
     }
     
     // Create initial tower build menu with the chocie between the two types of towers

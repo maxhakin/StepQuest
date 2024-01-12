@@ -34,7 +34,6 @@ class Tower: SKNode {
     init(enemyHandler: EnemyHandler) {
         self.enemyHandler = enemyHandler
         super.init()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -86,6 +85,10 @@ class Tower: SKNode {
     
     func upgrade() {
         
+    }
+    
+    func getTowerType() -> String {
+        return towerType
     }
     
     func getTarget() -> Enemy? {
