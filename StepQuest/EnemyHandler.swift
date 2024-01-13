@@ -2,7 +2,7 @@
 //  EnemyHandler.swift
 //  StepQuest
 //
-//  Created by Louis Kürbis on 09/12/2023.
+//  Created by Max Hakin on 09/12/2023.
 //
 
 import Foundation
@@ -51,6 +51,13 @@ class EnemyHandler {
         gameScene.addChild(enemy)
     }
     
+    func removeAllEnemies() {
+        for enemy in enemies {
+            enemy.removeFromParent() // Remove the enemys from the scene
+        }
+        enemies.removeAll() // Clear the array
+    }
+    
     func updateEnemies(deltaTime: TimeInterval) {
         // Reverse the array so removing any members wont create issues
         for (index, enemy) in enemies.enumerated().reversed() {
@@ -62,4 +69,9 @@ class EnemyHandler {
                 enemy.move(deltaTime: deltaTime)
             }
         }
-    }}
+        
+        if enemies.isEmpty {
+            
+        }
+    }
+}

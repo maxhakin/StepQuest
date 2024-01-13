@@ -2,7 +2,7 @@
 //  Tower.swift
 //  StepQuest
 //
-//  Created by Louis Kürbis on 08/12/2023.
+//  Created by Max Hakin on 08/12/2023.
 //
 
 import Foundation

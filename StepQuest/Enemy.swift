@@ -2,7 +2,7 @@
 //  Enemy.swift
 //  StepQuest
 //
-//  Created by Louis Kürbis on 29/11/2023.
+//  Created by Max Hakin on 29/11/2023.
 //
 
 import Foundation
@@ -140,6 +140,7 @@ class Enemy: SKSpriteNode {
                 currentWaypoint += 1  // Move to the next waypoint
             } else {
                 removeFromParent()
+                
                 // Implement code later to end level/ or something
             }
             

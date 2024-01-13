@@ -2,7 +2,7 @@
 //  GameViewController.swift
 //  StepQuest
 //
-//  Created by Louis Kürbis on 27/11/2023.
+//  Created by Max Hakin on 27/11/2023.
 //
 
 import UIKit

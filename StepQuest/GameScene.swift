@@ -24,6 +24,7 @@ class GameScene: SKScene {
     private var towerHandler: TowerHandler?
     var enemyHandler: EnemyHandler?
     var projectileHandler: ProjectileHandler?
+    private var levelHandler: LevelHandler?
     
     override func didMove(to view: SKView) {
         loadTileMap()
@@ -38,12 +39,14 @@ class GameScene: SKScene {
         self.enemyHandler = EnemyHandler(gameScene: self)
         self.projectileHandler = ProjectileHandler(gameScene: self)
         self.towerHandler = TowerHandler(gameScene: self)
+        self.levelHandler = LevelHandler(enemyHandler: enemyHandler!)
+        levelHandler?.loadLevel()
         
-        enemyHandler?.makeAlien()
-        enemyHandler?.makeCrab()
-        enemyHandler?.makeWings()
-        enemyHandler?.makeStomper()
-        enemyHandler?.makeNerd()
+        //enemyHandler?.makeAlien()
+        //enemyHandler?.makeCrab()
+        //enemyHandler?.makeWings()
+        //enemyHandler?.makeStomper()
+        //enemyHandler?.makeNerd()
         super.didMove(to: view)
         
     }
@@ -109,6 +112,10 @@ class GameScene: SKScene {
         
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
             
+    }
+    
+    func restartLevel() {
+        
     }
     
     // Remove tower menu once its served its function

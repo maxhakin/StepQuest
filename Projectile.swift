@@ -2,7 +2,7 @@
 //  Projectile.swift
 //  StepQuest
 //
-//  Created by Louis Kürbis on 12/12/2023.
+//  Created by Max Hakin on 12/12/2023.
 //
 
 import Foundation
