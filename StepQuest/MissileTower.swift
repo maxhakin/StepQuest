@@ -17,11 +17,11 @@ class MissileTower: Tower {
         var stats: (range: CGFloat, attackSpeed: TimeInterval, damage: Int, baseImage: String, topImage: String, projectileType: String, towerType: String) {
             switch self {
                 case .missile1:
-                    return (400, 10, 10, "towerBase1", "turretMissile1", "bomb1", "missile1")
+                    return (400, 12, 30, "towerBase1", "turretMissile1", "bomb1", "missile1")
                 case .missile2:
-                    return (500, 7, 20, "towerBase2", "turretMissile2", "bomb1", "missile2")
+                    return (500, 10, 50, "towerBase2", "turretMissile2", "bomb1", "missile2")
                 case .missile3:
-                    return (600, 5, 30, "towerBase3", "turretMissile3", "bomb2", "missile3")
+                    return (600, 8, 90, "towerBase3", "turretMissile3", "bomb2", "missile3")
             }
         }
     }

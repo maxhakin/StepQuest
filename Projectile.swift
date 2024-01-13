@@ -17,6 +17,7 @@ class Projectile: SKNode {
     var projImage: SKSpriteNode
     
     var target: Enemy
+    var lastPos: CGPoint = CGPoint(x: 0, y: 0)
     
     
     enum ProjectileType {
@@ -121,6 +122,13 @@ class Projectile: SKNode {
             damageEnemy()
             removeFromParent()
         }
+        
+        // Fixes a bug of frozen projectiles
+        if lastPos == self.position {
+            removeFromParent()
+        }
+        
+        lastPos = self.position
     }
     
     deinit {

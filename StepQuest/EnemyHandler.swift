@@ -22,31 +22,31 @@ class EnemyHandler {
     }
     
     func makeCrab() {
-        let enemy = Enemy(path: walkPath, imageFile: "monsterCrab", health: 110, moveSpeed: 60.0)
+        let enemy = Enemy(path: walkPath, imageFile: "monsterCrab", health: 110, moveSpeed: 60.0, gameScene: gameScene)
         enemies.append(enemy)
         gameScene.addChild(enemy)
     }
     
     func makeNerd() {
-        let enemy = Enemy(path: walkPath, imageFile: "monsterNerd", health: 60, moveSpeed: 80.0)
+        let enemy = Enemy(path: walkPath, imageFile: "monsterNerd", health: 60, moveSpeed: 80.0, gameScene: gameScene)
         enemies.append(enemy)
         gameScene.addChild(enemy)
     }
     
     func makeStomper() {
-        let enemy = Enemy(path: walkPath, imageFile: "monsterStomp", health: 130, moveSpeed: 30.0)
+        let enemy = Enemy(path: walkPath, imageFile: "monsterStomp", health: 130, moveSpeed: 30.0, gameScene: gameScene)
         enemies.append(enemy)
         gameScene.addChild(enemy)
     }
     
     func makeAlien() {
-        let enemy = Enemy(path: walkPath, imageFile: "monsterAlien", health: 100, moveSpeed: 50.0)
+        let enemy = Enemy(path: walkPath, imageFile: "monsterAlien", health: 100, moveSpeed: 50.0, gameScene: gameScene)
         enemies.append(enemy)
         gameScene.addChild(enemy)
     }
     
     func makeWings() {
-        let enemy = Enemy(path: flyPath, imageFile: "monsterWings", health: 70, moveSpeed: 70.0)
+        let enemy = Enemy(path: flyPath, imageFile: "monsterWings", health: 70, moveSpeed: 70.0, gameScene: gameScene)
         enemies.append(enemy)
         gameScene.addChild(enemy)
     }
@@ -55,7 +55,7 @@ class EnemyHandler {
         for enemy in enemies {
             enemy.removeFromParent() // Remove the enemys from the scene
         }
-        enemies.removeAll() // Clear the array
+        //enemies.removeAll() // Clear the array
     }
     
     func updateEnemies(deltaTime: TimeInterval) {
@@ -71,7 +71,7 @@ class EnemyHandler {
         }
         
         if enemies.isEmpty {
-            
+            gameScene.nextLevel()
         }
     }
 }

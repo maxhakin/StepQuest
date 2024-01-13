@@ -17,12 +17,16 @@ class Enemy: SKSpriteNode {
     
     var currentWaypoint: Int = 1
     var currentNodeIndex: Int = 0
+    
+    var gameScene: GameScene
 
     
-    init(path: [SKNode], imageFile: String, health: Int, moveSpeed: CGFloat) {
+    init(path: [SKNode], imageFile: String, health: Int, moveSpeed: CGFloat, gameScene: GameScene) {
         self.imageFile = imageFile
         self.health = health
         self.moveSpeed = moveSpeed
+        
+        self.gameScene = gameScene
         
         let texture = SKTexture(imageNamed: imageFile)
         self.path = path
@@ -140,8 +144,7 @@ class Enemy: SKSpriteNode {
                 currentWaypoint += 1  // Move to the next waypoint
             } else {
                 removeFromParent()
-                
-                // Implement code later to end level/ or something
+                gameScene.restartLevel()
             }
             
             

@@ -21,7 +21,7 @@ class TurretTower: Tower {
                 case .turret2:
                     return (500, 7, 20, "towerBase2", "turretGun2", "bullet1", "turret2")
                 case .turret3:
-                    return (600, 5, 30, "towerBase3", "turretGun3", "bullet2", "turret3")
+                    return (600, 3, 30, "towerBase3", "turretGun3", "bullet2", "turret3")
             }
         }
     }

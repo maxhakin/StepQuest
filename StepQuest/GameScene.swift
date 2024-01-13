@@ -18,6 +18,7 @@ class GameScene: SKScene {
     var flyPath: [SKNode] = []
     private var towerPlaces: [SKShapeNode] = []
     private var towerMenu: TowerMenu?
+    private var level: Int = 1
     
     private var lastUpdateTime: TimeInterval = 0
     private var tapRecogniser: UITapGestureRecognizer?
@@ -115,7 +116,14 @@ class GameScene: SKScene {
     }
     
     func restartLevel() {
+        levelHandler?.loadLevel()
+    }
+    
+    func nextLevel() {
+        level+=1
+        levelHandler?.level = level
         
+        restartLevel()
     }
     
     // Remove tower menu once its served its function

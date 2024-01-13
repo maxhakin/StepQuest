@@ -20,11 +20,11 @@ class LevelHandler {
     
     // Static enemy spawn rates
     var initialSpawnRates = [
-        EnemySpawnRate(type: .alien, rate: 10),
-        EnemySpawnRate(type: .nerd, rate: 8),
-        EnemySpawnRate(type: .crab, rate: 5),
-        EnemySpawnRate(type: .wings, rate: 3),
-        EnemySpawnRate(type: .stomper, rate: 1)
+        EnemySpawnRate(type: .alien, rate: 2),
+        EnemySpawnRate(type: .nerd, rate: 1),
+        EnemySpawnRate(type: .crab, rate: 0.4),
+        EnemySpawnRate(type: .wings, rate: 0.3),
+        EnemySpawnRate(type: .stomper, rate: 0.2)
     ]
     
     var enemyHandler: EnemyHandler
@@ -66,7 +66,7 @@ class LevelHandler {
     }
     
     func spawnEnemies() {
-        let spawnInterval = 0.5 // Adjust as needed
+        let spawnInterval = 2.0 // Adjust as needed
         let spawnSequence = generateSpawnSequence(forLevel: level)
         
         for (index, enemyType) in spawnSequence.enumerated() {
@@ -92,5 +92,6 @@ class LevelHandler {
     func loadLevel() {
         enemyHandler.removeAllEnemies()
         spawnEnemies()
+        print(level)
     }
 }
