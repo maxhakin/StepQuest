@@ -96,6 +96,11 @@ class Projectile: SKNode {
     }
     
     func move(deltaTime: TimeInterval) {
+        //guard let targetParent = target.parent else {
+        //   removeFromParent()
+        //    return
+        //}
+        
         // Calculate the distance between the current position and the target
         let dx = target.position.x - position.x
         let dy = target.position.y - position.y

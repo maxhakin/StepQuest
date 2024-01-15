@@ -26,9 +26,7 @@ class ProjectileHandler {
     }
     
     func update(deltaTime: TimeInterval) {
-        var index = -1
-        for projectile in projectiles {
-            index += 1
+        for (index, projectile) in projectiles.enumerated().reversed() {
             if projectile.parent == nil {
                 // Projectile has been removed from the scene, so remove it from the array
                 projectiles.remove(at: index)

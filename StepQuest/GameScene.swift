@@ -19,6 +19,8 @@ class GameScene: SKScene {
     private var towerPlaces: [SKShapeNode] = []
     private var towerMenu: TowerMenu?
     private var level: Int = 1
+    var currencyLabel: SKLabelNode!
+    var levelLabel: SKLabelNode!
     
     private var lastUpdateTime: TimeInterval = 0
     private var tapRecogniser: UITapGestureRecognizer?
@@ -26,6 +28,8 @@ class GameScene: SKScene {
     var enemyHandler: EnemyHandler?
     var projectileHandler: ProjectileHandler?
     private var levelHandler: LevelHandler?
+    private var gameStateHandler: GameStateHandler?
+    private var healthKitHandler: HealthKitHandler?
     
     override func didMove(to view: SKView) {
         loadTileMap()
@@ -40,18 +44,40 @@ class GameScene: SKScene {
         self.enemyHandler = EnemyHandler(gameScene: self)
         self.projectileHandler = ProjectileHandler(gameScene: self)
         self.towerHandler = TowerHandler(gameScene: self)
-        self.levelHandler = LevelHandler(enemyHandler: enemyHandler!)
+        self.levelHandler = LevelHandler(enemyHandler: enemyHandler!, gameScene: self)
         levelHandler?.loadLevel()
+        self.healthKitHandler = HealthKitHandler()
         
-        //enemyHandler?.makeAlien()
-        //enemyHandler?.makeCrab()
-        //enemyHandler?.makeWings()
-        //enemyHandler?.makeStomper()
-        //enemyHandler?.makeNerd()
+        // Initialize the SKLabelNodes
+        currencyLabel = self.childNode(withName: "currencyLabel") as? SKLabelNode
+        levelLabel = self.childNode(withName: "levelLabel") as? SKLabelNode
+        
+        self.gameStateHandler = GameStateHandler(towerHandler: towerHandler!, lvlHandler: levelHandler!, healthKitHandler: healthKitHandler!)
+        gameStateHandler?.loadGameState()
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.gameStateHandler = gameStateHandler
+        }
+        
+        // Initial update of currency and level
+        updateLabels()
+        
         super.didMove(to: view)
         
     }
     
+    func updateLabels() {
+        // Assume you have a way to get the current level and currency
+        let currentLevel = levelHandler?.getLvl() ?? 1
+        let currentCurrency = 11209
+
+        // Format the data with leading zeros
+        let formattedLevel = String(format: "%04d", currentLevel)
+        let formattedCurrency = String(format: "%06d", currentCurrency)
+
+        // Update the label texts
+        currencyLabel.text = formattedCurrency 
+        levelLabel.text = formattedLevel
+    }
     
     func loadTileMap() {
         guard let tileMapNode = self.childNode(withName: "terrainMap") as? SKTileMapNode else {
@@ -234,6 +260,7 @@ class GameScene: SKScene {
                     
                     let towerType = tower.getTowerType()
                     towerMenu = TowerMenu(menuType: towerType, place: place)
+                    towerMenu!.position = sceneLocation
                     addChild(towerMenu!)
                     
                 } else {

@@ -29,6 +29,9 @@
 		9AB9079D2B17575100EDC200 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB9079C2B17575100EDC200 /* Enemy.swift */; };
 		9AB907A12B17607400EDC200 /* InputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB907A02B17607400EDC200 /* InputHandler.swift */; };
 		9ACBC63E2B2340590072FA56 /* Tower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACBC63D2B2340590072FA56 /* Tower.swift */; };
+		AD15F2102B53F04F00396CFB /* GameStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD15F20F2B53F04F00396CFB /* GameStateHandler.swift */; };
+		AD15F2122B540C8800396CFB /* GameData.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD15F2112B540C8800396CFB /* GameData.plist */; };
+		AD15F2142B544A4F00396CFB /* HealthKitHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD15F2132B544A4F00396CFB /* HealthKitHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +58,9 @@
 		9AB9079C2B17575100EDC200 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		9AB907A02B17607400EDC200 /* InputHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputHandler.swift; sourceTree = "<group>"; };
 		9ACBC63D2B2340590072FA56 /* Tower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tower.swift; sourceTree = "<group>"; };
+		AD15F20F2B53F04F00396CFB /* GameStateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStateHandler.swift; sourceTree = "<group>"; };
+		AD15F2112B540C8800396CFB /* GameData.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GameData.plist; sourceTree = "<group>"; };
+		AD15F2132B544A4F00396CFB /* HealthKitHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,13 +95,14 @@
 		9A157DC52B14FD3900094855 /* StepQuest */ = {
 			isa = PBXGroup;
 			children = (
-				9A8CF6D32B2A04F8009FE841 /* TowerMenuButton.swift */,
-				9A8CF6D12B29E2CF009FE841 /* TowerMenu.swift */,
-				9A6007872B162911003D22F6 /* GridTileSet.sks */,
+				9A157DCE2B14FD3A00094855 /* GameViewController.swift */,
+				9A157DCC2B14FD3A00094855 /* GameScene.swift */,
+				9A157DC82B14FD3A00094855 /* GameScene.sks */,
 				9A157DC62B14FD3A00094855 /* AppDelegate.swift */,
 				9A157DCA2B14FD3A00094855 /* Actions.sks */,
-				9A157DC82B14FD3A00094855 /* GameScene.sks */,
-				9A157DCC2B14FD3A00094855 /* GameScene.swift */,
+				9A6007872B162911003D22F6 /* GridTileSet.sks */,
+				9A8CF6D32B2A04F8009FE841 /* TowerMenuButton.swift */,
+				9A8CF6D12B29E2CF009FE841 /* TowerMenu.swift */,
 				9AB907A02B17607400EDC200 /* InputHandler.swift */,
 				9A0C8E022B2232F10047A21A /* TowerHandler.swift */,
 				9ACBC63D2B2340590072FA56 /* Tower.swift */,
@@ -106,7 +113,9 @@
 				9A25C62A2B249A360013C5DC /* EnemyHandler.swift */,
 				9AB9079C2B17575100EDC200 /* Enemy.swift */,
 				9A0C8E042B2234090047A21A /* LevelHandler.swift */,
-				9A157DCE2B14FD3A00094855 /* GameViewController.swift */,
+				AD15F20F2B53F04F00396CFB /* GameStateHandler.swift */,
+				AD15F2112B540C8800396CFB /* GameData.plist */,
+				AD15F2132B544A4F00396CFB /* HealthKitHandler.swift */,
 				9A157DD02B14FD3A00094855 /* Main.storyboard */,
 				9A157DD32B14FD3C00094855 /* Assets.xcassets */,
 				9A157DD52B14FD3C00094855 /* LaunchScreen.storyboard */,
@@ -184,6 +193,7 @@
 				9A157DD22B14FD3A00094855 /* Main.storyboard in Resources */,
 				9A157DC92B14FD3A00094855 /* GameScene.sks in Resources */,
 				9A157DD42B14FD3C00094855 /* Assets.xcassets in Resources */,
+				AD15F2122B540C8800396CFB /* GameData.plist in Resources */,
 				9A157DD72B14FD3C00094855 /* LaunchScreen.storyboard in Resources */,
 				9A157DCB2B14FD3A00094855 /* Actions.sks in Resources */,
 			);
@@ -197,6 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A157DCD2B14FD3A00094855 /* GameScene.swift in Sources */,
+				AD15F2142B544A4F00396CFB /* HealthKitHandler.swift in Sources */,
 				9AB9079D2B17575100EDC200 /* Enemy.swift in Sources */,
 				9A8CF6D22B29E2CF009FE841 /* TowerMenu.swift in Sources */,
 				9A8B5CD52B28BCAB0008B359 /* Projectile.swift in Sources */,
@@ -205,6 +216,7 @@
 				9A0C8E032B2232F10047A21A /* TowerHandler.swift in Sources */,
 				9A8B5CD72B28CB1B0008B359 /* ProjectileHandler.swift in Sources */,
 				9ACBC63E2B2340590072FA56 /* Tower.swift in Sources */,
+				AD15F2102B53F04F00396CFB /* GameStateHandler.swift in Sources */,
 				9A157DC72B14FD3A00094855 /* AppDelegate.swift in Sources */,
 				9A0C8E052B2234090047A21A /* LevelHandler.swift in Sources */,
 				9A25C62B2B249A360013C5DC /* EnemyHandler.swift in Sources */,

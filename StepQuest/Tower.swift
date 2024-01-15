@@ -21,7 +21,7 @@ class Tower: SKNode {
     var projectileType: String?
     
     var towerType: String = ""
-    var towerLocation: CGPoint?
+    //var towerLocation: CGPoint?
     var enemyHandler: EnemyHandler
     
     var scale: CGFloat = 0.65
@@ -89,6 +89,15 @@ class Tower: SKNode {
     
     func getTowerType() -> String {
         return towerType
+    }
+    
+    func getTowerData() -> TowerData {
+        let point = getPositionInScene()
+        let xValue = Double(point.x)
+        let yValue = Double(point.y)
+        
+        return TowerData(type: towerType, xPos: xValue, yPos: yValue)
+        
     }
     
     func getTarget() -> Enemy? {

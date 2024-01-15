@@ -87,6 +87,31 @@ class TowerHandler {
         }
     }
     
+    func getTowerDataArray() -> [TowerData] {
+        return towers.map { $0.getTowerData() }
+    }
+    
+    func restoreTowers(towerData: [TowerData]) {
+        let towerPlaces: [SKShapeNode] = (gameScene?.getTowerPlaces())!
+        for towerDatum in towerData {
+            let type = towerDatum.type
+            let xPos = towerDatum.xPos
+            let yPos = towerDatum.yPos
+            let point = CGPoint(x: xPos, y: yPos)
+            
+            for place in towerPlaces {
+                if place.contains(point) {
+                    if type.count == 7 {
+                        addTurretTower(at: place, levelString: type)
+                    } else {
+                        addMissileTower(at: place, levelString: type)
+                    }
+                }
+            }
+            
+        }
+    }
+    
     func update(deltaTime: TimeInterval) {
         for tower in towers {
             if tower.parent != nil {

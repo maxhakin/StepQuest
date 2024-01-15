@@ -28,10 +28,12 @@ class LevelHandler {
     ]
     
     var enemyHandler: EnemyHandler
+    var gameScene: GameScene
     var level: Int = 1
     
-    init(enemyHandler: EnemyHandler) {
+    init(enemyHandler: EnemyHandler, gameScene: GameScene) {
         self.enemyHandler = enemyHandler
+        self.gameScene = gameScene
     }
     
     func scaleForLevel(level: Int) -> Double {
@@ -89,9 +91,17 @@ class LevelHandler {
         }
     }
     
+    func getLvl() -> Int{
+        return level
+    }
+    
+    func setLvl(level: Int) {
+        self.level = level
+        
+    }
+    
     func loadLevel() {
         enemyHandler.removeAllEnemies()
         spawnEnemies()
-        print(level)
-    }
+        gameScene.updateLabels()    }
 }
