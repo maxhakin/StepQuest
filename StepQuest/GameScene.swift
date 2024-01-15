@@ -18,9 +18,9 @@ class GameScene: SKScene {
     var flyPath: [SKNode] = []
     private var towerPlaces: [SKShapeNode] = []
     private var towerMenu: TowerMenu?
-    private var level: Int = 1
-    var currencyLabel: SKLabelNode!
-    var levelLabel: SKLabelNode!
+    private var level: Int = 0
+    var currencyLabel: SKLabelNode?
+    var levelLabel: SKLabelNode?
     
     private var lastUpdateTime: TimeInterval = 0
     private var tapRecogniser: UITapGestureRecognizer?
@@ -52,6 +52,10 @@ class GameScene: SKScene {
         currencyLabel = self.childNode(withName: "currencyLabel") as? SKLabelNode
         levelLabel = self.childNode(withName: "levelLabel") as? SKLabelNode
         
+        if currencyLabel == nil {
+            print("Error: currencyLabel not found in the scene")
+        } else {print("Label not null")}
+        
         self.gameStateHandler = GameStateHandler(towerHandler: towerHandler!, lvlHandler: levelHandler!, healthKitHandler: healthKitHandler!)
         gameStateHandler?.loadGameState()
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
@@ -75,8 +79,8 @@ class GameScene: SKScene {
         let formattedCurrency = String(format: "%06d", currentCurrency)
 
         // Update the label texts
-        currencyLabel.text = formattedCurrency 
-        levelLabel.text = formattedLevel
+        currencyLabel?.text = formattedCurrency 
+        levelLabel?.text = formattedLevel
     }
     
     func loadTileMap() {
