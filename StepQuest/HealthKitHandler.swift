@@ -54,6 +54,7 @@ class HealthKitHandler {
     
     
     func getSteps(from lastDay: Date) {
+        
         let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
         
         let now = Date()
@@ -71,7 +72,7 @@ class HealthKitHandler {
                 print("Error: Data could not be collected.")
                 return
             }
-            
+            print("HK Query worked")
             statsCollection.enumerateStatistics(from: startOfLastDay, to: now) { statistics, stop in
                 // Get the date associated with this interval
                 let intervalDate = statistics.startDate
@@ -93,10 +94,12 @@ class HealthKitHandler {
             self.setTotalSpendableSteps()
             print(self.totalSteps)
         }
+        print("query skipped?")
     }
 
     
     func fetchInitialWeeksSteps() {
+        print("Initial week called")
         let now = Date()
         firstTimeAccessed = Calendar.current.startOfDay(for: now)
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now

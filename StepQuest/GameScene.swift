@@ -41,25 +41,47 @@ class GameScene: SKScene {
         
         self.gameCam = self.childNode(withName: "gameCam") as? SKCameraNode
         self.camera = gameCam
+        self.healthKitHandler = HealthKitHandler()
         self.enemyHandler = EnemyHandler(gameScene: self)
         self.projectileHandler = ProjectileHandler(gameScene: self)
         self.towerHandler = TowerHandler(gameScene: self)
         self.levelHandler = LevelHandler(enemyHandler: enemyHandler!, gameScene: self)
         levelHandler?.loadLevel()
-        self.healthKitHandler = HealthKitHandler()
+        
         
         // Initialize the SKLabelNodes
         currencyLabel = self.childNode(withName: "currencyLabel") as? SKLabelNode
         levelLabel = self.childNode(withName: "levelLabel") as? SKLabelNode
         
-        if currencyLabel == nil {
-            print("Error: currencyLabel not found in the scene")
-        } else {print("Label not null")}
+        
         
         self.gameStateHandler = GameStateHandler(towerHandler: towerHandler!, lvlHandler: levelHandler!, healthKitHandler: healthKitHandler!)
-        gameStateHandler?.loadGameState()
+        
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             appDelegate.gameStateHandler = gameStateHandler
+        }
+        
+        if healthKitHandler?.totalSteps == 0 {
+            healthKitHandler?.requestAuthorization { success, error in
+                if success {
+                    print("HealthKit authorization granted")
+                    self.healthKitHandler?.fetchInitialWeeksSteps()
+                } else {
+                    // Authorization was denied or encountered an error
+                    if let error = error {
+                        print("HealthKit authorization failed with error: \(error.localizedDescription)")
+                    } else {
+                        print("HealthKit authorization denied")
+                    }
+                    // Handle authorization denial or error gracefully
+                }
+            }
+            
+            
+        } else {
+            gameStateHandler?.loadGameState()
+            healthKitHandler?.fetchStepsSinceLastUpdate()
+            print("if statement not complete")
         }
         
         // Initial update of currency and level
