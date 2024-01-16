@@ -18,7 +18,7 @@ class GameScene: SKScene {
     var flyPath: [SKNode] = []
     private var towerPlaces: [SKShapeNode] = []
     private var towerMenu: TowerMenu?
-    private var level: Int = 0
+    //private var level: Int = 0
     var currencyLabel: SKLabelNode?
     var levelLabel: SKLabelNode?
     
@@ -70,9 +70,11 @@ class GameScene: SKScene {
     }
     
     func updateLabels() {
-        // Assume you have a way to get the current level and currency
+        // Get the current level and currency
         let currentLevel = levelHandler?.getLvl() ?? 1
-        let currentCurrency = 11209
+        let steps = healthKitHandler!.totalSteps
+        let spent = healthKitHandler!.spentSteps
+        let currentCurrency = steps - spent
 
         // Format the data with leading zeros
         let formattedLevel = String(format: "%04d", currentLevel)
@@ -150,8 +152,8 @@ class GameScene: SKScene {
     }
     
     func nextLevel() {
-        level+=1
-        levelHandler?.level = level
+        //level+=1
+        levelHandler?.level += 1
         
         restartLevel()
     }
@@ -171,17 +173,35 @@ class GameScene: SKScene {
             
             switch switcher {
             case "turret1":
-                towerHandler?.addTurretTower(at: place!, levelString: "turret1")
+                if canAfford() {
+                    buyTower()
+                    towerHandler?.addTurretTower(at: place!, levelString: "turret1")
+                }
             case "turret2":
-                towerHandler?.upgradeTower(at: place!)
+                if canAfford() {
+                    buyTower()
+                    towerHandler?.upgradeTower(at: place!)
+                }
             case "turret3":
-                towerHandler?.upgradeTower(at: place!)
+                if canAfford() {
+                    buyTower()
+                    towerHandler?.upgradeTower(at: place!)
+                }
             case "missile1":
-                towerHandler?.addMissileTower(at: place!, levelString: "missile1")
+                if canAfford() {
+                    buyTower()
+                    towerHandler?.addMissileTower(at: place!, levelString: "missile1")
+                }
             case "missile2":
-                towerHandler?.upgradeTower(at: place!)
+                if canAfford() {
+                    buyTower()
+                    towerHandler?.upgradeTower(at: place!)
+                }
             case "missile3":
-                towerHandler?.upgradeTower(at: place!)
+                if canAfford() {
+                    buyTower()
+                    towerHandler?.upgradeTower(at: place!)
+                }
             case "delete":
                 towerHandler?.deleteTower(at: place!)
             default:
@@ -189,6 +209,20 @@ class GameScene: SKScene {
                 
             }
         }
+    }
+    
+    func buyTower() {
+        healthKitHandler?.spentSteps -= 2000
+        updateLabels()
+    }
+    
+    func canAfford() -> Bool {
+        let steps = healthKitHandler!.totalSteps
+        let spent = healthKitHandler!.spentSteps
+        let currentCurrency = steps - spent
+        if currentCurrency >= 2000 {
+            return true
+        } else {return false}
     }
         
     override func update(_ currentTime: TimeInterval) {

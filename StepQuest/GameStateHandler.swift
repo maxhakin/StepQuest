@@ -12,6 +12,10 @@ struct GameState: Codable {
     var level: Int
     var towerData: [TowerData]
     var timeLastUpdated: Date
+    var dailyStepData: [DailyStepCount]
+    var firstTimeAccessed: Date?
+    var totalSteps: Double
+    var spentSteps: Double
     //Add other relevant game state properties
 }
 
@@ -39,7 +43,7 @@ class GameStateHandler {
     }
     
     func saveGameState() {
-        let gameState = GameState(level: getLvlData(), towerData: getTowerData(), timeLastUpdated: Date())
+        let gameState = GameState(level: getLvlData(), towerData: getTowerData(), timeLastUpdated: Date(), dailyStepData: healthKitHandler.dailySteps, firstTimeAccessed: healthKitHandler.firstTimeAccessed, totalSteps: healthKitHandler.totalSteps, spentSteps: healthKitHandler.spentSteps)
         do {
             let data = try JSONEncoder().encode(gameState)
             try data.write(to: gameStateFilePath(), options: .atomic)
@@ -57,9 +61,13 @@ class GameStateHandler {
             let towerData = gameState.towerData
             let level = gameState.level
             let lastUpdate = gameState.timeLastUpdated
+            let stepData = gameState.dailyStepData
+            let firstDate = gameState.firstTimeAccessed!
+            let stepsTotal = gameState.totalSteps
+            let spentTotal = gameState.spentSteps
             towerHandler.restoreTowers(towerData: towerData)
             levelHandler.setLvl(level: level)
-            healthKitHandler.setTimeLastUpdated(lastTime: lastUpdate)
+            healthKitHandler.setData(lastTime: lastUpdate, stepData: stepData, firstTime: firstDate, stepTotal: stepsTotal, spentTotal: spentTotal)
         } catch {
             print("Error loading game state: \(error)")
         }

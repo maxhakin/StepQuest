@@ -8,8 +8,15 @@
 import Foundation
 import HealthKit
 
+// Create a struct to hold daily step count data
+struct DailyStepCount: Codable {
+    let date: Date
+    var steps: Double
+}
+
 class HealthKitHandler {
     
+    // Error codes
     enum HealthKitError: Error {
         case notAvailableOnDevice
         case dataTypeNotAvailable
@@ -17,7 +24,12 @@ class HealthKitHandler {
         case unexpectedError
     }
     
+    var firstTimeAccessed: Date?
     var timeLastUpdated: Date?
+    var totalSteps: Double = 0
+    var spentSteps: Double = 0
+    var netSteps: Int = 10000
+    var dailySteps: [DailyStepCount] = []
     
     let healthStore = HKHealthStore()
 
@@ -40,65 +52,80 @@ class HealthKitHandler {
         }
     }
     
-    func fetchStepsCount(from startDate: Date, to endDate: Date, completion: @escaping (Double?, Error?) -> Void) {
-        guard let stepsCount = HKObjectType.quantityType(forIdentifier: .stepCount) else {
-            completion(nil, HealthKitError.dataTypeNotAvailable)
-            return
-        }
-
-        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
-
-        let query = HKStatisticsQuery(quantityType: stepsCount, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, statistics, error in
-            guard let statistics = statistics, error == nil else {
-                completion(nil, error)
+    
+    func getSteps(from lastDay: Date) {
+        let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
+        
+        let now = Date()
+        let startOfLastDay = Calendar.current.startOfDay(for: lastDay)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfLastDay, end: now, options: .strictStartDate)
+        
+        let query = HKStatisticsCollectionQuery.init(quantityType: stepsType,
+                                                     quantitySamplePredicate: predicate,
+                                                     options: .cumulativeSum,
+                                                     anchorDate: startOfLastDay,
+                                                     intervalComponents: DateComponents(day: 1))
+        
+        query.initialResultsHandler = { query, results, error in
+            guard let statsCollection = results else {
+                print("Error: Data could not be collected.")
                 return
             }
+            
+            statsCollection.enumerateStatistics(from: startOfLastDay, to: now) { statistics, stop in
+                // Get the date associated with this interval
+                let intervalDate = statistics.startDate
+                // Get the step count for this interval (day)
+                if let quantity = statistics.sumQuantity() {
+                    let stepValue = quantity.doubleValue(for: HKUnit.count())
 
-            let sum = statistics.sumQuantity()?.doubleValue(for: HKUnit.count())
-            completion(sum, nil)
+                    // Check if an entry with the same date already exists in the array
+                    if let existingIndex = self.dailySteps.firstIndex(where: { $0.date == intervalDate }) {
+                        // Update the existing entry with the new step count
+                        self.dailySteps[existingIndex].steps = stepValue
+                    } else {
+                        // If it doesn't exist, append the new entry
+                        let stepCount = DailyStepCount(date: intervalDate, steps: stepValue)
+                        self.dailySteps.append(stepCount)
+                    }
+                }
+            }
+            self.setTotalSpendableSteps()
+            print(self.totalSteps)
         }
-
-        healthStore.execute(query)
     }
+
     
     func fetchInitialWeeksSteps() {
         let now = Date()
-        let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now)!
-
-        fetchStepsCount(from: oneWeekAgo, to: now) { steps, error in
-            guard let steps = steps, error == nil else {
-                // Handle error
-                return
-            }
-
-            // Send `steps` to your database
-        }
+        firstTimeAccessed = Calendar.current.startOfDay(for: now)
+        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
+        
+        getSteps(from: weekAgo)
     }
     
-    func updateStepCurrency() {
-        let now = Date()
-        let lastFetchedDate = timeLastUpdated ?? now
-        let startOfDay = Calendar.current.startOfDay(for: now)
-
-        // If the user hasn't used the app since yesterday or earlier
-        if lastFetchedDate < startOfDay {
-            fetchStepsCount(from: lastFetchedDate, to: now) { [weak self] steps, error in
-                guard let steps = steps, error == nil else {
-                    // Handle error
-                    return
-                }
-
-                // Update currency with `steps`
-                // Send `steps` and other relevant data to your database
-
-                // Update 'last fetched' date
-                self?.setTimeLastUpdated(lastTime: now)
-            }
-        }
+    func fetchStepsSinceLastUpdate() {
+        getSteps(from: timeLastUpdated ?? Date())
     }
     
-    func setTimeLastUpdated(lastTime: Date) {
+    func setTotalSpendableSteps() {
+        // Define the date threshold
+        let thresholdDate = Calendar.current.startOfDay(for: firstTimeAccessed!)
+
+        // Filter the array to select DailyStepCount instances with dates after the threshold date
+        let filteredCounts = dailySteps.filter { $0.date >= thresholdDate }
+
+        // Calculate the total steps for the selected instances
+        totalSteps = filteredCounts.reduce(0.0) { $0 + $1.steps }
+    }
+    
+    
+    func setData(lastTime: Date, stepData: [DailyStepCount], firstTime: Date, stepTotal: Double, spentTotal: Double) {
         timeLastUpdated = lastTime
+        dailySteps = stepData
+        firstTimeAccessed = firstTime
+        totalSteps = stepTotal
+        spentSteps = spentTotal
     }
     
     func getTimeLastUpdated() -> Date {
