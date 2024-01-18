@@ -46,7 +46,6 @@ class Enemy: SKSpriteNode {
     
     func getStartPos() -> CGPoint? {
             if let firstNode = path.first {
-                print("first node found")
                 return firstNode.position
             } else {
                 print("first node not found")

@@ -28,7 +28,6 @@ class HealthKitHandler {
     var timeLastUpdated: Date?
     var totalSteps: Double = 0
     var spentSteps: Double = 0
-    var netSteps: Int = 10000
     var dailySteps: [DailyStepCount] = []
     
     let healthStore = HKHealthStore()
@@ -49,6 +48,8 @@ class HealthKitHandler {
         // Request authorization
         healthStore.requestAuthorization(toShare: [], read: [stepsCount]) { success, error in
             completion(success, error)
+            print("Authorisation Succesful")
+            self.fetchInitialWeeksSteps()
         }
     }
     
@@ -94,6 +95,8 @@ class HealthKitHandler {
             self.setTotalSpendableSteps()
             print(self.totalSteps)
         }
+        
+        healthStore.execute(query)
         print("query skipped?")
     }
 

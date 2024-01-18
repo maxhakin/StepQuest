@@ -18,7 +18,6 @@ class GameScene: SKScene {
     var flyPath: [SKNode] = []
     private var towerPlaces: [SKShapeNode] = []
     private var towerMenu: TowerMenu?
-    //private var level: Int = 0
     var currencyLabel: SKLabelNode?
     var levelLabel: SKLabelNode?
     
@@ -61,11 +60,13 @@ class GameScene: SKScene {
             appDelegate.gameStateHandler = gameStateHandler
         }
         
+        gameStateHandler?.loadGameState()
+        
         if healthKitHandler?.totalSteps == 0 {
             healthKitHandler?.requestAuthorization { success, error in
                 if success {
                     print("HealthKit authorization granted")
-                    self.healthKitHandler?.fetchInitialWeeksSteps()
+                    //self.healthKitHandler?.fetchInitialWeeksSteps()
                 } else {
                     // Authorization was denied or encountered an error
                     if let error = error {
@@ -79,7 +80,6 @@ class GameScene: SKScene {
             
             
         } else {
-            gameStateHandler?.loadGameState()
             healthKitHandler?.fetchStepsSinceLastUpdate()
             print("if statement not complete")
         }
@@ -96,14 +96,15 @@ class GameScene: SKScene {
         let currentLevel = levelHandler?.getLvl() ?? 1
         let steps = healthKitHandler!.totalSteps
         let spent = healthKitHandler!.spentSteps
-        let currentCurrency = steps - spent
+        let currentCurrency = Int(steps - spent)
+        
 
         // Format the data with leading zeros
         let formattedLevel = String(format: "%04d", currentLevel)
-        let formattedCurrency = String(format: "%06d", currentCurrency)
+        let formattedCurrency = String(format: "%07d", currentCurrency)
 
         // Update the label texts
-        currencyLabel?.text = formattedCurrency 
+        currencyLabel?.text = formattedCurrency
         levelLabel?.text = formattedLevel
     }
     
@@ -234,7 +235,7 @@ class GameScene: SKScene {
     }
     
     func buyTower() {
-        healthKitHandler?.spentSteps -= 2000
+        healthKitHandler?.spentSteps += 2000
         updateLabels()
     }
     
