@@ -30,6 +30,8 @@ class GameScene: SKScene {
     private var gameStateHandler: GameStateHandler?
     private var healthKitHandler: HealthKitHandler?
     
+    private var network: Network = Network()
+    
     override func didMove(to view: SKView) {
         loadTileMap()
         loadWalkPath()
@@ -46,6 +48,8 @@ class GameScene: SKScene {
         self.towerHandler = TowerHandler(gameScene: self)
         self.levelHandler = LevelHandler(enemyHandler: enemyHandler!, gameScene: self)
         levelHandler?.loadLevel()
+        
+        //self.network = Network()
         
         
         // Initialize the SKLabelNodes
@@ -103,6 +107,9 @@ class GameScene: SKScene {
         let formattedLevel = String(format: "%04d", currentLevel)
         let formattedCurrency = String(format: "%07d", currentCurrency)
 
+        // Update remote database
+        updateUserData(userID: gameStateHandler!.userID, highLevel: currentLevel, totalSteps: Int(steps))
+        
         // Update the label texts
         currencyLabel?.text = formattedCurrency
         levelLabel?.text = formattedLevel
@@ -260,6 +267,83 @@ class GameScene: SKScene {
         enemyHandler?.updateEnemies(deltaTime: deltaTime)
         towerHandler?.update(deltaTime: deltaTime)
         projectileHandler?.update(deltaTime: deltaTime)
+    }
+    
+    //Fetch user data from remote database through network API
+    func fetchUserData() {
+        let url = URLServices.getUserData
+        let request = network.request(parameters: ["userID": "someUserID"], url: url)
+        
+        network.response(request: request) { data in
+            self.network.handleResponse(data: data) { result in
+                switch result {
+                case .success(let users):
+                    // Update your UI with user data
+                    print(users)
+                case .failure(let error):
+                    // Handle the error
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    //Set userData in remote database though network API
+    func setUserData(userName: String, highLevel: Int, totalSteps: Int) {
+        let parameters = ["userName": userName, "highLevel": highLevel, "totalSteps": totalSteps] as [String : Any]
+        let request = network.request(parameters: parameters, url: URLServices.setUserData)
+        
+        network.response(request: request) { data in
+            self.network.handleServerResponse(data: data) { result in
+                switch result {
+                case .success(let serverResponse):
+                    if serverResponse.success {
+                        // Data successfully saved
+                        print(serverResponse.message ?? "Success")
+                    } else {
+                        // Server returned an error
+                        print(serverResponse.message ?? "Error")
+                    }
+                case .failure(let error):
+                    // Handle the error
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    // Update highlevel and totalSteps fow row in userID remote database where userID = userID
+    func updateUserData(userID: Int, highLevel: Int, totalSteps: Int) {
+        let parameters = ["userID": userID, "highLevel": highLevel, "totalSteps": totalSteps] as [String: Any]
+        let request = network.request(parameters: parameters, url: URLServices.updateUserData) // Use your actual URL here
+        
+        network.response(request: request) { data in
+            self.network.handleServerResponse(data: data) { result in
+                switch result {
+                case .success(let serverResponse):
+                    // Handle successful response
+                    print(serverResponse.message ?? "Success")
+                case .failure(let error):
+                    // Handle error
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    // Insert new row of usage data into remote database
+    func insertAppUsageData(userID: Int, date: String, steps: Int, level: Int) {
+        let parameters = ["userID": userID, "date": date, "steps": steps, "level": level] as [String: Any]
+        let request = network.request(parameters: parameters, url: URLServices.setUsageData) // Use your actual URL here
+
+        network.response(request: request) { data in
+            // Assuming a simple response string for success/failure
+            if let responseString = String(data: data, encoding: .utf8) {
+                print(responseString)
+            } else {
+                print("Failed to decode response")
+            }
+        }
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {

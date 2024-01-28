@@ -9,6 +9,7 @@ import Foundation
 import SpriteKit
 
 struct GameState: Codable {
+    var userID: Int
     var level: Int
     var towerData: [TowerData]
     var timeLastUpdated: Date
@@ -29,6 +30,7 @@ class GameStateHandler {
     private var towerHandler: TowerHandler
     private var levelHandler: LevelHandler
     private var healthKitHandler: HealthKitHandler
+    var userID: Int = 0
     
     
     init(towerHandler: TowerHandler, lvlHandler: LevelHandler, healthKitHandler: HealthKitHandler) {
