@@ -70,7 +70,7 @@ class GameScene: SKScene {
             healthKitHandler?.requestAuthorization { success, error in
                 if success {
                     print("HealthKit authorization granted")
-                    //self.healthKitHandler?.fetchInitialWeeksSteps()
+                    self.healthKitHandler?.fetchInitialWeeksSteps()
                 } else {
                     // Authorization was denied or encountered an error
                     if let error = error {
@@ -88,10 +88,16 @@ class GameScene: SKScene {
             print("if statement not complete")
         }
         
+        setUserData()
+        
         // Initial update of currency and level
         updateLabels()
         
         super.didMove(to: view)
+        
+    }
+    
+    func setUserID(userID: Int) {
         
     }
     
@@ -108,7 +114,7 @@ class GameScene: SKScene {
         let formattedCurrency = String(format: "%07d", currentCurrency)
 
         // Update remote database
-        updateUserData(userID: gameStateHandler!.userID, highLevel: currentLevel, totalSteps: Int(steps))
+        //updateUserData()
         
         // Update the label texts
         currencyLabel?.text = formattedCurrency
@@ -244,6 +250,7 @@ class GameScene: SKScene {
     func buyTower() {
         healthKitHandler?.spentSteps += 2000
         updateLabels()
+        updateUserData()
     }
     
     func canAfford() -> Bool {
@@ -289,8 +296,8 @@ class GameScene: SKScene {
     }
     
     //Set userData in remote database though network API
-    func setUserData(userName: String, highLevel: Int, totalSteps: Int) {
-        let parameters = ["userName": userName, "highLevel": highLevel, "totalSteps": totalSteps] as [String : Any]
+    func setUserData() {
+        let parameters = ["userName": gameStateHandler!.userName, "highLevel": levelHandler!.level, "totalSteps": healthKitHandler!.totalSteps] as [String: Any]
         let request = network.request(parameters: parameters, url: URLServices.setUserData)
         
         network.response(request: request) { data in
@@ -300,21 +307,29 @@ class GameScene: SKScene {
                     if serverResponse.success {
                         // Data successfully saved
                         print(serverResponse.message ?? "Success")
+                        if let userID = serverResponse.userID {
+                            // Set userID to userID returned from the server
+                            self.gameStateHandler?.userID = userID
+                            print("User ID: \(userID)")
+                        }
                     } else {
                         // Server returned an error
                         print(serverResponse.message ?? "Error")
                     }
                 case .failure(let error):
                     // Handle the error
-                    print(error)
+                    print(error.localizedDescription)
                 }
             }
         }
     }
     
     // Update highlevel and totalSteps fow row in userID remote database where userID = userID
-    func updateUserData(userID: Int, highLevel: Int, totalSteps: Int) {
-        let parameters = ["userID": userID, "highLevel": highLevel, "totalSteps": totalSteps] as [String: Any]
+    func updateUserData() {
+        let ID = gameStateHandler?.userID
+        let level = levelHandler?.level
+        let totalSteps = healthKitHandler?.totalSteps
+        let parameters = ["userID": ID!, "highLevel": level!, "totalSteps": totalSteps!] as [String: Any]
         let request = network.request(parameters: parameters, url: URLServices.updateUserData) // Use your actual URL here
         
         network.response(request: request) { data in
@@ -332,8 +347,8 @@ class GameScene: SKScene {
     }
     
     // Insert new row of usage data into remote database
-    func insertAppUsageData(userID: Int, date: String, steps: Int, level: Int) {
-        let parameters = ["userID": userID, "date": date, "steps": steps, "level": level] as [String: Any]
+    func insertAppUsageData(userID: Int, steps: Int, level: Int) {
+        let parameters = ["userID": userID, "steps": steps, "level": level] as [String: Any]
         let request = network.request(parameters: parameters, url: URLServices.setUsageData) // Use your actual URL here
 
         network.response(request: request) { data in

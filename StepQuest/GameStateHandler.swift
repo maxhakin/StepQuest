@@ -10,6 +10,7 @@ import SpriteKit
 
 struct GameState: Codable {
     var userID: Int
+    var userName: String
     var level: Int
     var towerData: [TowerData]
     var timeLastUpdated: Date
@@ -31,6 +32,7 @@ class GameStateHandler {
     private var levelHandler: LevelHandler
     private var healthKitHandler: HealthKitHandler
     var userID: Int = 0
+    var userName: String = ""
     
     
     init(towerHandler: TowerHandler, lvlHandler: LevelHandler, healthKitHandler: HealthKitHandler) {
@@ -45,7 +47,7 @@ class GameStateHandler {
     }
     
     func saveGameState() {
-        let gameState = GameState(level: getLvlData(), towerData: getTowerData(), timeLastUpdated: Date(), dailyStepData: healthKitHandler.dailySteps, firstTimeAccessed: healthKitHandler.firstTimeAccessed, totalSteps: healthKitHandler.totalSteps, spentSteps: healthKitHandler.spentSteps)
+        let gameState = GameState(userID: userID, userName: userName, level: getLvlData(), towerData: getTowerData(), timeLastUpdated: Date(), dailyStepData: healthKitHandler.dailySteps, firstTimeAccessed: healthKitHandler.firstTimeAccessed, totalSteps: healthKitHandler.totalSteps, spentSteps: healthKitHandler.spentSteps)
         do {
             let data = try JSONEncoder().encode(gameState)
             try data.write(to: gameStateFilePath(), options: .atomic)
@@ -67,6 +69,8 @@ class GameStateHandler {
             let firstDate = gameState.firstTimeAccessed!
             let stepsTotal = gameState.totalSteps
             let spentTotal = gameState.spentSteps
+            userID = gameState.userID
+            userName = gameState.userName
             towerHandler.restoreTowers(towerData: towerData)
             levelHandler.setLvl(level: level)
             healthKitHandler.setData(lastTime: lastUpdate, stepData: stepData, firstTime: firstDate, stepTotal: stepsTotal, spentTotal: spentTotal)

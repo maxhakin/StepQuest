@@ -9,12 +9,12 @@ if (mysqli_connect_errno()) {
 
 // Data sent from the client with a POST request
 $userID = $con->real_escape_string($_POST['userID']);
-$date = $con->real_escape_string($_POST['date']); // Expecting a format like 'YYYY-MM-DD'
 $steps = $con->real_escape_string($_POST['steps']);
 $level = $con->real_escape_string($_POST['level']);
 
-$stmt = $con->prepare("INSERT INTO appUsage (userID, date, steps, level) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("sssis", $userID, $date, $steps, $level);
+// Prepare the INSERT statement with NOW() for the current datetime
+$stmt = $con->prepare("INSERT INTO appUsage (userID, date, steps, level) VALUES (?, NOW(), ?, ?)");
+$stmt->bind_param("iii", $userID, $steps, $level);
 
 // Execute the query and check if it was successful
 if ($stmt->execute()) {

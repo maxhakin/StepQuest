@@ -13,16 +13,14 @@ protocol Downloadable: AnyObject {
 
 enum URLServices {
     // change to your PHP script in your own server.
-    static let setUsageData: String = "http://localhost:8888/MyHolidays/setUsageData.php"
-    static let setUserData: String = "http://localhost:8888/MyHolidays/setUserData.php"
-    static let getUserData: String = "http://localhost:8888/MyHolidays/getUserData.php"
-    static let updateUserData: String = "http://localhost:8888/MyHolidays/updateUserData.php"
+    static let setUsageData: String = "http://unn_w22064166.newnumyspace.co.uk/stepQuest/setUsageData.php"
+    static let setUserData: String = "http://unn_w22064166.newnumyspace.co.uk/stepQuest/setUserData.php"
+    static let getUserData: String = "http://unn_w22064166.newnumyspace.co.uk/stepQuest/getUserData.php"
+    static let updateUserData: String = "http://unn_w22064166.newnumyspace.co.uk/stepQuest/updateUserData.php"
     
 }
 
 struct UserData: Codable {
-    var userID: Int
-    var email: String
     var userName: String
     var highLevel: Int
     var totalSteps: Int
@@ -31,6 +29,7 @@ struct UserData: Codable {
 struct ServerResponse: Codable {
     var success: Bool
     var message: String?
+    var userID: Int?
 }
 
 class Network{
@@ -40,6 +39,7 @@ class Network{
         request.httpMethod = "POST"
         
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
+        print("URL:", request)
         return request
     }
     
