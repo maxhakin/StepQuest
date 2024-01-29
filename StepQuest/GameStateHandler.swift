@@ -16,8 +16,8 @@ struct GameState: Codable {
     var timeLastUpdated: Date
     var dailyStepData: [DailyStepCount]
     var firstTimeAccessed: Date?
-    var totalSteps: Double
-    var spentSteps: Double
+    var totalSteps: Int
+    var spentSteps: Int
     //Add other relevant game state properties
 }
 
@@ -31,8 +31,8 @@ class GameStateHandler {
     private var towerHandler: TowerHandler
     private var levelHandler: LevelHandler
     private var healthKitHandler: HealthKitHandler
-    var userID: Int = 0
-    var userName: String = ""
+    var userID: Int = 1
+    var userName: String = "username"
     
     
     init(towerHandler: TowerHandler, lvlHandler: LevelHandler, healthKitHandler: HealthKitHandler) {
@@ -47,7 +47,7 @@ class GameStateHandler {
     }
     
     func saveGameState() {
-        let gameState = GameState(userID: userID, userName: userName, level: getLvlData(), towerData: getTowerData(), timeLastUpdated: Date(), dailyStepData: healthKitHandler.dailySteps, firstTimeAccessed: healthKitHandler.firstTimeAccessed, totalSteps: healthKitHandler.totalSteps, spentSteps: healthKitHandler.spentSteps)
+        let gameState = GameState(userID: userID, userName: userName, level: getLvlData(), towerData: getTowerData(), timeLastUpdated: Date(), dailyStepData: healthKitHandler.dailySteps, firstTimeAccessed: healthKitHandler.firstTimeAccessed, totalSteps: Int(healthKitHandler.totalSteps), spentSteps: Int(healthKitHandler.spentSteps))
         do {
             let data = try JSONEncoder().encode(gameState)
             try data.write(to: gameStateFilePath(), options: .atomic)

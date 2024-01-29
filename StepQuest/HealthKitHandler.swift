@@ -11,7 +11,7 @@ import HealthKit
 // Create a struct to hold daily step count data
 struct DailyStepCount: Codable {
     let date: Date
-    var steps: Double
+    var steps: Int
 }
 
 class HealthKitHandler {
@@ -26,8 +26,8 @@ class HealthKitHandler {
     
     var firstTimeAccessed: Date?
     var timeLastUpdated: Date?
-    var totalSteps: Double = 0
-    var spentSteps: Double = 0
+    var totalSteps: Int = 0
+    var spentSteps: Int = 0
     var dailySteps: [DailyStepCount] = []
     
     let healthStore = HKHealthStore()
@@ -79,7 +79,7 @@ class HealthKitHandler {
                 let intervalDate = statistics.startDate
                 // Get the step count for this interval (day)
                 if let quantity = statistics.sumQuantity() {
-                    let stepValue = quantity.doubleValue(for: HKUnit.count())
+                    let stepValue = Int(quantity.doubleValue(for: HKUnit.count()))
 
                     // Check if an entry with the same date already exists in the array
                     if let existingIndex = self.dailySteps.firstIndex(where: { $0.date == intervalDate }) {
@@ -122,11 +122,11 @@ class HealthKitHandler {
         let filteredCounts = dailySteps.filter { $0.date >= thresholdDate }
 
         // Calculate the total steps for the selected instances
-        totalSteps = filteredCounts.reduce(0.0) { $0 + $1.steps }
+        totalSteps = filteredCounts.reduce(0) { $0 + $1.steps }
     }
     
     
-    func setData(lastTime: Date, stepData: [DailyStepCount], firstTime: Date, stepTotal: Double, spentTotal: Double) {
+    func setData(lastTime: Date, stepData: [DailyStepCount], firstTime: Date, stepTotal: Int, spentTotal: Int) {
         timeLastUpdated = lastTime
         dailySteps = stepData
         firstTimeAccessed = firstTime

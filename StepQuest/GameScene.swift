@@ -298,6 +298,7 @@ class GameScene: SKScene {
     //Set userData in remote database though network API
     func setUserData() {
         let parameters = ["userName": gameStateHandler!.userName, "highLevel": levelHandler!.level, "totalSteps": healthKitHandler!.totalSteps] as [String: Any]
+        print(parameters)
         let request = network.request(parameters: parameters, url: URLServices.setUserData)
         
         network.response(request: request) { data in

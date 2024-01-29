@@ -65,13 +65,15 @@ class EnemyHandler {
                 // Enemy has been removed from the scene, so remove it from the array
                 enemies.remove(at: index)
                 print("Enemy removed from array")
+                
+                if enemies.isEmpty {
+                    gameScene.nextLevel()
+                }
             } else {
                 enemy.move(deltaTime: deltaTime)
             }
         }
         
-        if enemies.isEmpty {
-            gameScene.nextLevel()
-        }
+        
     }
 }

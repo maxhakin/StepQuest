@@ -29,7 +29,7 @@ class LevelHandler {
     
     var enemyHandler: EnemyHandler
     var gameScene: GameScene
-    var level: Int = 0
+    var level: Int = 1
     
     init(enemyHandler: EnemyHandler, gameScene: GameScene) {
         self.enemyHandler = enemyHandler

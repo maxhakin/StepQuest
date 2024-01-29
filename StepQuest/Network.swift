@@ -39,12 +39,17 @@ class Network{
         request.httpMethod = "POST"
         
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
-        print("URL:", request)
+        if let httpBody = request.httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
+            print("HTTP Body: \(bodyString)")
+        }
         return request
     }
     
     func response(request: URLRequest, completionBlock: @escaping (Data) -> Void) -> Void {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data {
+                print(String(data: data, encoding: .utf8) ?? "No readable data")
+            }
             guard let data = data,
                 let response = response as? HTTPURLResponse,
                 error == nil else {   // check for fundamental networking error
