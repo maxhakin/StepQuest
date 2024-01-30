@@ -37,6 +37,7 @@
 		AD6273FA2B6406C300DA69DE /* setUsageData.php in Resources */ = {isa = PBXBuildFile; fileRef = AD6273F92B6406C300DA69DE /* setUsageData.php */; };
 		AD6273FD2B6412CF00DA69DE /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6273FC2B6412CF00DA69DE /* Network.swift */; };
 		AD6273FF2B66E81700DA69DE /* updateUserData.php in Resources */ = {isa = PBXBuildFile; fileRef = AD6273FE2B66E81700DA69DE /* updateUserData.php */; };
+		AD6274012B68285D00DA69DE /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = AD6274002B68285D00DA69DE /* test.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,9 +71,9 @@
 		AD6273F32B6404DC00DA69DE /* getUserData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = getUserData.php; sourceTree = "<group>"; };
 		AD6273F72B64055C00DA69DE /* setUserData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = setUserData.php; sourceTree = "<group>"; };
 		AD6273F92B6406C300DA69DE /* setUsageData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = setUsageData.php; sourceTree = "<group>"; };
-		AD6273FB2B640BC700DA69DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AD6273FC2B6412CF00DA69DE /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		AD6273FE2B66E81700DA69DE /* updateUserData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = updateUserData.php; sourceTree = "<group>"; };
+		AD6274002B68285D00DA69DE /* test.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,9 +108,9 @@
 		9A157DC52B14FD3900094855 /* StepQuest */ = {
 			isa = PBXGroup;
 			children = (
-				AD6273FB2B640BC700DA69DE /* Info.plist */,
 				AD2F4F122B57092A00223EA0 /* StepQuest.entitlements */,
 				AD6273FC2B6412CF00DA69DE /* Network.swift */,
+				AD6274002B68285D00DA69DE /* test.html */,
 				AD6273F92B6406C300DA69DE /* setUsageData.php */,
 				AD6273F72B64055C00DA69DE /* setUserData.php */,
 				AD6273F32B6404DC00DA69DE /* getUserData.php */,
@@ -216,6 +217,7 @@
 				9A157DD22B14FD3A00094855 /* Main.storyboard in Resources */,
 				9A157DC92B14FD3A00094855 /* GameScene.sks in Resources */,
 				9A157DD42B14FD3C00094855 /* Assets.xcassets in Resources */,
+				AD6274012B68285D00DA69DE /* test.html in Resources */,
 				AD15F2122B540C8800396CFB /* GameData.plist in Resources */,
 				9A157DD72B14FD3C00094855 /* LaunchScreen.storyboard in Resources */,
 				9A157DCB2B14FD3A00094855 /* Actions.sks in Resources */,
