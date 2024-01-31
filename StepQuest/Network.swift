@@ -13,11 +13,11 @@ protocol Downloadable: AnyObject {
 
 enum URLServices {
     // change to your PHP script in your own server.
-    static let setUsageData: String = "http://unn_w22064166.newnumyspace.co.uk/stepQuest/setUsageData.php"
-    static let setUserData: String = //"http://unn_w22064166.newnumyspace.co.uk/stepQuest/setUserData.php"
-        "http://localhost:8888/setUserData.php"
-    static let getUserData: String = "http://unn_w22064166.newnumyspace.co.uk/stepQuest/getUserData.php"
-    static let updateUserData: String = "http://unn_w22064166.newnumyspace.co.uk/stepQuest/updateUserData.php"
+    static let setUsageData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUsageData.php"
+    static let setUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUserData.php"
+        //"http://localhost:8888/setUserData.php"
+    static let getUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/getUserData.php"
+    static let updateUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/updateUserData.php"
     
 }
 
@@ -37,15 +37,16 @@ class Network{
     func request(parameters: [String: Any], url: String) -> URLRequest {
         var request = URLRequest(url: URL(string: url)!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        //request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.httpMethod = "POST"
         
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
+        print("Body:", request.httpBody ?? "empty bod?")
         if let httpBody = request.httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
             print("HTTP Body: \(bodyString)")
         }
         
-        print(request.httpBody)
+        //print(request.httpBody)
         
         return request
     }

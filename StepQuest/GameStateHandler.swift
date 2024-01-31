@@ -31,8 +31,8 @@ class GameStateHandler {
     private var towerHandler: TowerHandler
     private var levelHandler: LevelHandler
     private var healthKitHandler: HealthKitHandler
-    var userID: Int = 1
-    var userName: String = "username"
+    var userID: Int = 55
+    var userName: String = "ellierocks"
     
     
     init(towerHandler: TowerHandler, lvlHandler: LevelHandler, healthKitHandler: HealthKitHandler) {
