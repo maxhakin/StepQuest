@@ -51,6 +51,39 @@ class Network{
         return request
     }
     
+    func JSONRequest(url: String, jsonBody: [String: Any], completion: @escaping (Result<ServerResponse, Error>) -> Void) {
+            guard let requestUrl = URL(string: url) else {
+                completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))
+                return
+            }
+
+            var request = URLRequest(url: requestUrl)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
+                request.httpBody = jsonData
+            } catch {
+                completion(.failure(error))
+                return
+            }
+
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(error ?? NSError(domain: "NetworkError", code: -2, userInfo: nil)))
+                    return
+                }
+
+                do {
+                    let serverResponse = try JSONDecoder().decode(ServerResponse.self, from: data)
+                    completion(.success(serverResponse))
+                } catch {
+                    completion(.failure(error))
+                }
+            }.resume()
+        }
+    
     func response(request: URLRequest, completionBlock: @escaping (Data) -> Void) -> Void {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {

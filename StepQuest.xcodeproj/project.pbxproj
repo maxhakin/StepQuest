@@ -32,13 +32,14 @@
 		AD15F2102B53F04F00396CFB /* GameStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD15F20F2B53F04F00396CFB /* GameStateHandler.swift */; };
 		AD15F2122B540C8800396CFB /* GameData.plist in Resources */ = {isa = PBXBuildFile; fileRef = AD15F2112B540C8800396CFB /* GameData.plist */; };
 		AD15F2142B544A4F00396CFB /* HealthKitHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD15F2132B544A4F00396CFB /* HealthKitHandler.swift */; };
-		AD6273F42B6404DC00DA69DE /* getUserData.php in Resources */ = {isa = PBXBuildFile; fileRef = AD6273F32B6404DC00DA69DE /* getUserData.php */; };
 		AD6273F82B64055C00DA69DE /* setUserData.php in Resources */ = {isa = PBXBuildFile; fileRef = AD6273F72B64055C00DA69DE /* setUserData.php */; };
 		AD6273FA2B6406C300DA69DE /* setUsageData.php in Resources */ = {isa = PBXBuildFile; fileRef = AD6273F92B6406C300DA69DE /* setUsageData.php */; };
 		AD6273FD2B6412CF00DA69DE /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6273FC2B6412CF00DA69DE /* Network.swift */; };
 		AD6273FF2B66E81700DA69DE /* updateUserData.php in Resources */ = {isa = PBXBuildFile; fileRef = AD6273FE2B66E81700DA69DE /* updateUserData.php */; };
 		AD6274012B68285D00DA69DE /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = AD6274002B68285D00DA69DE /* test.html */; };
 		ADD32AB12B6BADCB00FD3041 /* UIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD32AB02B6BADCB00FD3041 /* UIHandler.swift */; };
+		ADD32AB32B6BD88500FD3041 /* NetworkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD32AB22B6BD88500FD3041 /* NetworkHandler.swift */; };
+		ADD32AB52B6BF4E000FD3041 /* getLeaderBoard.php in Resources */ = {isa = PBXBuildFile; fileRef = ADD32AB42B6BF4E000FD3041 /* getLeaderBoard.php */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,13 +70,14 @@
 		AD15F2112B540C8800396CFB /* GameData.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GameData.plist; sourceTree = "<group>"; };
 		AD15F2132B544A4F00396CFB /* HealthKitHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitHandler.swift; sourceTree = "<group>"; };
 		AD2F4F122B57092A00223EA0 /* StepQuest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StepQuest.entitlements; sourceTree = "<group>"; };
-		AD6273F32B6404DC00DA69DE /* getUserData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = getUserData.php; sourceTree = "<group>"; };
 		AD6273F72B64055C00DA69DE /* setUserData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = setUserData.php; sourceTree = "<group>"; };
 		AD6273F92B6406C300DA69DE /* setUsageData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = setUsageData.php; sourceTree = "<group>"; };
 		AD6273FC2B6412CF00DA69DE /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		AD6273FE2B66E81700DA69DE /* updateUserData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = updateUserData.php; sourceTree = "<group>"; };
 		AD6274002B68285D00DA69DE /* test.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 		ADD32AB02B6BADCB00FD3041 /* UIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHandler.swift; sourceTree = "<group>"; };
+		ADD32AB22B6BD88500FD3041 /* NetworkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandler.swift; sourceTree = "<group>"; };
+		ADD32AB42B6BF4E000FD3041 /* getLeaderBoard.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = getLeaderBoard.php; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,10 +114,11 @@
 			children = (
 				AD2F4F122B57092A00223EA0 /* StepQuest.entitlements */,
 				AD6273FC2B6412CF00DA69DE /* Network.swift */,
+				ADD32AB22B6BD88500FD3041 /* NetworkHandler.swift */,
 				AD6274002B68285D00DA69DE /* test.html */,
+				ADD32AB42B6BF4E000FD3041 /* getLeaderBoard.php */,
 				AD6273F92B6406C300DA69DE /* setUsageData.php */,
 				AD6273F72B64055C00DA69DE /* setUserData.php */,
-				AD6273F32B6404DC00DA69DE /* getUserData.php */,
 				AD6273FE2B66E81700DA69DE /* updateUserData.php */,
 				9A157DCE2B14FD3A00094855 /* GameViewController.swift */,
 				9A157DCC2B14FD3A00094855 /* GameScene.swift */,
@@ -214,10 +217,10 @@
 			files = (
 				9A6007892B162911003D22F6 /* GridTileSet.sks in Resources */,
 				AD6273FF2B66E81700DA69DE /* updateUserData.php in Resources */,
-				AD6273F42B6404DC00DA69DE /* getUserData.php in Resources */,
 				AD6273F82B64055C00DA69DE /* setUserData.php in Resources */,
 				AD6273FA2B6406C300DA69DE /* setUsageData.php in Resources */,
 				9A157DD22B14FD3A00094855 /* Main.storyboard in Resources */,
+				ADD32AB52B6BF4E000FD3041 /* getLeaderBoard.php in Resources */,
 				9A157DC92B14FD3A00094855 /* GameScene.sks in Resources */,
 				9A157DD42B14FD3C00094855 /* Assets.xcassets in Resources */,
 				AD6274012B68285D00DA69DE /* test.html in Resources */,
@@ -237,6 +240,7 @@
 				9A157DCD2B14FD3A00094855 /* GameScene.swift in Sources */,
 				AD15F2142B544A4F00396CFB /* HealthKitHandler.swift in Sources */,
 				ADD32AB12B6BADCB00FD3041 /* UIHandler.swift in Sources */,
+				ADD32AB32B6BD88500FD3041 /* NetworkHandler.swift in Sources */,
 				9AB9079D2B17575100EDC200 /* Enemy.swift in Sources */,
 				9A8CF6D22B29E2CF009FE841 /* TowerMenu.swift in Sources */,
 				9A8B5CD52B28BCAB0008B359 /* Projectile.swift in Sources */,

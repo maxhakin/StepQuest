@@ -31,6 +31,7 @@ class GameScene: SKScene {
     private var healthKitHandler: HealthKitHandler?
     
     private var network: Network = Network()
+    private var networkHandler: NetworkHandler?
     
     override func didMove(to view: SKView) {
         loadTileMap()
@@ -59,10 +60,11 @@ class GameScene: SKScene {
         
         
         self.gameStateHandler = GameStateHandler(towerHandler: towerHandler!, lvlHandler: levelHandler!, healthKitHandler: healthKitHandler!)
-       
+        self.networkHandler = NetworkHandler(network: network, gameStateHandler: gameStateHandler)
         
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             appDelegate.gameStateHandler = gameStateHandler
+            appDelegate.gameScene = self
         }
         
         gameStateHandler?.loadGameState()
@@ -119,10 +121,6 @@ class GameScene: SKScene {
             }
             
         }
-    }
-    
-    func setUserID(userID: Int) {
-        
     }
     
     func updateLabels() {
@@ -300,91 +298,19 @@ class GameScene: SKScene {
         projectileHandler?.update(deltaTime: deltaTime)
     }
     
-    //Fetch user data from remote database through network API
-    func fetchUserData() {
-        let url = URLServices.getUserData
-        let request = network.request(parameters: ["userID": "someUserID"], url: url)
-        
-        network.response(request: request) { data in
-            self.network.handleResponse(data: data) { result in
-                switch result {
-                case .success(let users):
-                    // Update your UI with user data
-                    print(users)
-                case .failure(let error):
-                    // Handle the error
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    //Set userData in remote database though network API
     func setUserData() {
-        let parameters = ["userName": gameStateHandler!.userName, "highLevel": levelHandler!.level, "totalSteps": healthKitHandler!.totalSteps] as [String: Any]
-        print(parameters)
-        let request = network.request(parameters: parameters, url: URLServices.setUserData)
-        
-        network.response(request: request) { data in
-            self.network.handleServerResponse(data: data) { result in
-                switch result {
-                case .success(let serverResponse):
-                    if serverResponse.success {
-                        // Data successfully saved
-                        print(serverResponse.message ?? "Success")
-                        if let userID = serverResponse.userID {
-                            // Set userID to userID returned from the server
-                            self.gameStateHandler?.userID = userID
-                            print("User ID: \(userID)")
-                        }
-                    } else {
-                        // Server returned an error
-                        print(serverResponse.message ?? "Error")
-                    }
-                case .failure(let error):
-                    // Handle the error
-                    print(error.localizedDescription)
-                }
-            }
-        }
+        networkHandler?.setUserData(username: gameStateHandler!.userName, highLevel: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
     }
     
-    // Update highlevel and totalSteps fow row in userID remote database where userID = userID
     func updateUserData() {
-        let ID = gameStateHandler?.userID
-        let level = levelHandler?.level
-        let totalSteps = healthKitHandler?.totalSteps
-        let parameters = ["userID": ID!, "highLevel": level!, "totalSteps": totalSteps!] as [String: Any]
-        let request = network.request(parameters: parameters, url: URLServices.updateUserData) // Use your actual URL here
-        
-        network.response(request: request) { data in
-            self.network.handleServerResponse(data: data) { result in
-                switch result {
-                case .success(let serverResponse):
-                    // Handle successful response
-                    print(serverResponse.message ?? "Success")
-                case .failure(let error):
-                    // Handle error
-                    print(error.localizedDescription)
-                }
-            }
-        }
+        networkHandler?.updateUserData(id: gameStateHandler!.userID, level: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
     }
     
-    // Insert new row of usage data into remote database
-    func insertAppUsageData(userID: Int, steps: Int, level: Int) {
-        let parameters = ["userID": userID, "steps": steps, "level": level] as [String: Any]
-        let request = network.request(parameters: parameters, url: URLServices.setUsageData) // Use your actual URL here
-
-        network.response(request: request) { data in
-            // Assuming a simple response string for success/failure
-            if let responseString = String(data: data, encoding: .utf8) {
-                print(responseString)
-            } else {
-                print("Failed to decode response")
-            }
-        }
+    func insertUsageData() {
+        networkHandler?.insertAppUsageData(userID: gameStateHandler!.userID, dailySteps: healthKitHandler!.dailySteps)
     }
+    
+    
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         

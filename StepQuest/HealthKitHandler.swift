@@ -93,6 +93,7 @@ class HealthKitHandler {
                 }
             }
             self.setTotalSpendableSteps()
+            self.timeLastUpdated = now
             print(self.totalSteps)
         }
         
