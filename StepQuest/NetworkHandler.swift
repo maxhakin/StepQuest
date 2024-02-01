@@ -88,33 +88,37 @@ class NetworkHandler {
     }
     
     // Insert new row of usage data into remote database
-    func insertAppUsageData(userID: Int, dailySteps: [DailyStepCount]) {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
+    func insertDailyStats(userID: Int, dailySteps: [DailyStepCount]) {
+        //print(dailySteps)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
 
-            let formattedSteps = dailySteps.map { stat -> [String: Any] in
-                let dateString = dateFormatter.string(from: stat.date)
-                return ["date": dateString, "steps": stat.steps]
-            }
+        let formattedSteps = dailySteps.map { stat -> [String: Any] in
+            let dateString = dateFormatter.string(from: stat.date)
+            return ["date": dateString, "steps": stat.steps]
+        }
+        
+        //print(formattedSteps)
 
-            // Serialize the formatted steps array to a JSON string
-            guard let stepsData = try? JSONSerialization.data(withJSONObject: formattedSteps, options: []),
-                  let stepsJSONString = String(data: stepsData, encoding: .utf8) else {
+        // Serialize the formatted steps array to a JSON string
+        guard let stepsData = try? JSONSerialization.data(withJSONObject: formattedSteps, options: []),
+            let stepsJSONString = String(data: stepsData, encoding: .utf8) else {
                 print("Failed to encode steps to JSON")
                 return
             }
 
-            // Prepare parameters for the network request, including the JSON-encoded steps
+        // Prepare parameters for the network request, including the JSON-encoded steps
         let parameters = ["userID": userID, "dailySteps": stepsJSONString] as [String : Any]
 
-            // Call the sendJSONRequest method of the Network class
-            network.JSONRequest(url: URLServices.setUsageData, jsonBody: parameters) { result in
-                switch result {
+        // Call the sendJSONRequest method of the Network class
+        network.JSONRequest(url: URLServices.updateDailyStats, jsonBody: parameters) { result in
+            switch result {
                 case .success(let serverResponse):
                     print("Server response: \(serverResponse.message ?? "")")
                 case .failure(let error):
                     print("Error: \(error.localizedDescription)")
-                }
             }
         }
+    }
 }

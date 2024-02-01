@@ -60,7 +60,7 @@ class GameScene: SKScene {
         
         
         self.gameStateHandler = GameStateHandler(towerHandler: towerHandler!, lvlHandler: levelHandler!, healthKitHandler: healthKitHandler!)
-        self.networkHandler = NetworkHandler(network: network, gameStateHandler: gameStateHandler)
+        self.networkHandler = NetworkHandler(network: network, gameStateHandler: gameStateHandler!)
         
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             appDelegate.gameStateHandler = gameStateHandler
@@ -306,8 +306,8 @@ class GameScene: SKScene {
         networkHandler?.updateUserData(id: gameStateHandler!.userID, level: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
     }
     
-    func insertUsageData() {
-        networkHandler?.insertAppUsageData(userID: gameStateHandler!.userID, dailySteps: healthKitHandler!.dailySteps)
+    func insertDailyStats() {
+        networkHandler?.insertDailyStats(userID: gameStateHandler!.userID, dailySteps: healthKitHandler!.dailySteps)
     }
     
     

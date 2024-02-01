@@ -40,6 +40,7 @@
 		ADD32AB12B6BADCB00FD3041 /* UIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD32AB02B6BADCB00FD3041 /* UIHandler.swift */; };
 		ADD32AB32B6BD88500FD3041 /* NetworkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD32AB22B6BD88500FD3041 /* NetworkHandler.swift */; };
 		ADD32AB52B6BF4E000FD3041 /* getLeaderBoard.php in Resources */ = {isa = PBXBuildFile; fileRef = ADD32AB42B6BF4E000FD3041 /* getLeaderBoard.php */; };
+		ADD32AB72B6BF88800FD3041 /* setDailyStats.php in Resources */ = {isa = PBXBuildFile; fileRef = ADD32AB62B6BF88800FD3041 /* setDailyStats.php */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		ADD32AB02B6BADCB00FD3041 /* UIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHandler.swift; sourceTree = "<group>"; };
 		ADD32AB22B6BD88500FD3041 /* NetworkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandler.swift; sourceTree = "<group>"; };
 		ADD32AB42B6BF4E000FD3041 /* getLeaderBoard.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = getLeaderBoard.php; sourceTree = "<group>"; };
+		ADD32AB62B6BF88800FD3041 /* setDailyStats.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = setDailyStats.php; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				AD6274002B68285D00DA69DE /* test.html */,
 				ADD32AB42B6BF4E000FD3041 /* getLeaderBoard.php */,
 				AD6273F92B6406C300DA69DE /* setUsageData.php */,
+				ADD32AB62B6BF88800FD3041 /* setDailyStats.php */,
 				AD6273F72B64055C00DA69DE /* setUserData.php */,
 				AD6273FE2B66E81700DA69DE /* updateUserData.php */,
 				9A157DCE2B14FD3A00094855 /* GameViewController.swift */,
@@ -224,6 +227,7 @@
 				9A157DC92B14FD3A00094855 /* GameScene.sks in Resources */,
 				9A157DD42B14FD3C00094855 /* Assets.xcassets in Resources */,
 				AD6274012B68285D00DA69DE /* test.html in Resources */,
+				ADD32AB72B6BF88800FD3041 /* setDailyStats.php in Resources */,
 				AD15F2122B540C8800396CFB /* GameData.plist in Resources */,
 				9A157DD72B14FD3C00094855 /* LaunchScreen.storyboard in Resources */,
 				9A157DCB2B14FD3A00094855 /* Actions.sks in Resources */,

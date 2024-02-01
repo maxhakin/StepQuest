@@ -14,7 +14,7 @@ $highLevel = $con->real_escape_string($_POST['highLevel']);
 $totalSteps = $con->real_escape_string($_POST['totalSteps']);
 
 // Prepare the UPDATE statement
-$stmt = $con->prepare("UPDATE your_table_name SET highLevel = ?, totalSteps = ? WHERE userID = ?");
+$stmt = $con->prepare("UPDATE userData SET highLevel = ?, totalSteps = ? WHERE userID = ?");
 $stmt->bind_param("iii", $highLevel, $totalSteps, $userID);
 
 // Execute the query and check if it was successful
