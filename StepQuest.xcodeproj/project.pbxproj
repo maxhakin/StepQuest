@@ -38,7 +38,7 @@
 		AD6273FD2B6412CF00DA69DE /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6273FC2B6412CF00DA69DE /* Network.swift */; };
 		AD6273FF2B66E81700DA69DE /* updateUserData.php in Resources */ = {isa = PBXBuildFile; fileRef = AD6273FE2B66E81700DA69DE /* updateUserData.php */; };
 		AD6274012B68285D00DA69DE /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = AD6274002B68285D00DA69DE /* test.html */; };
-		ADD32AAF2B6ACB0800FD3041 /* TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD32AAE2B6ACB0800FD3041 /* TextInput.swift */; };
+		ADD32AB12B6BADCB00FD3041 /* UIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD32AB02B6BADCB00FD3041 /* UIHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,7 +75,7 @@
 		AD6273FC2B6412CF00DA69DE /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		AD6273FE2B66E81700DA69DE /* updateUserData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = updateUserData.php; sourceTree = "<group>"; };
 		AD6274002B68285D00DA69DE /* test.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
-		ADD32AAE2B6ACB0800FD3041 /* TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInput.swift; sourceTree = "<group>"; };
+		ADD32AB02B6BADCB00FD3041 /* UIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +119,7 @@
 				AD6273FE2B66E81700DA69DE /* updateUserData.php */,
 				9A157DCE2B14FD3A00094855 /* GameViewController.swift */,
 				9A157DCC2B14FD3A00094855 /* GameScene.swift */,
-				ADD32AAE2B6ACB0800FD3041 /* TextInput.swift */,
+				ADD32AB02B6BADCB00FD3041 /* UIHandler.swift */,
 				9A157DC82B14FD3A00094855 /* GameScene.sks */,
 				9A157DC62B14FD3A00094855 /* AppDelegate.swift */,
 				9A157DCA2B14FD3A00094855 /* Actions.sks */,
@@ -236,10 +236,10 @@
 			files = (
 				9A157DCD2B14FD3A00094855 /* GameScene.swift in Sources */,
 				AD15F2142B544A4F00396CFB /* HealthKitHandler.swift in Sources */,
+				ADD32AB12B6BADCB00FD3041 /* UIHandler.swift in Sources */,
 				9AB9079D2B17575100EDC200 /* Enemy.swift in Sources */,
 				9A8CF6D22B29E2CF009FE841 /* TowerMenu.swift in Sources */,
 				9A8B5CD52B28BCAB0008B359 /* Projectile.swift in Sources */,
-				ADD32AAF2B6ACB0800FD3041 /* TextInput.swift in Sources */,
 				9A6056512B307F2C0015A95E /* MissileTower.swift in Sources */,
 				9A157DCF2B14FD3A00094855 /* GameViewController.swift in Sources */,
 				9A0C8E032B2232F10047A21A /* TowerHandler.swift in Sources */,
@@ -402,6 +402,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = StepQuest/StepQuest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0.1;
@@ -438,6 +439,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = StepQuest/StepQuest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0.1;

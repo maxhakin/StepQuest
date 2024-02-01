@@ -59,6 +59,7 @@ class GameScene: SKScene {
         
         
         self.gameStateHandler = GameStateHandler(towerHandler: towerHandler!, lvlHandler: levelHandler!, healthKitHandler: healthKitHandler!)
+       
         
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             appDelegate.gameStateHandler = gameStateHandler
@@ -80,6 +81,7 @@ class GameScene: SKScene {
                     }
                     // Handle authorization denial or error gracefully
                 }
+                self.presentUIHandler(action: "textInput")
             }
             
             
@@ -88,13 +90,35 @@ class GameScene: SKScene {
             print("if statement not complete")
         }
         
-        setUserData()
+        //setUserData()
         
         // Initial update of currency and level
         updateLabels()
         
         super.didMove(to: view)
         
+    }
+    
+    func presentUIHandler(action: String) {
+        DispatchQueue.main.async {
+            guard let viewController = self.view?.window?.rootViewController else {
+                print("Could not find a root view controller.")
+                return
+            }
+
+            let uiHandler = UIHandler(gameStateHandler: self.gameStateHandler!, gameScene: self)
+            
+            viewController.modalPresentationStyle = .overCurrentContext
+            viewController.present(uiHandler, animated: true) {
+                // After UIHandler is presented, decide what to show based on the action parameter
+                if action == "textInput" {
+                    uiHandler.makeTextInput()
+                } else if action == "leaderboard" {
+                    uiHandler.makeLeaderboards()
+                }
+            }
+            
+        }
     }
     
     func setUserID(userID: Int) {

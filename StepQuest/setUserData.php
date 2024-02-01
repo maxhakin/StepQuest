@@ -9,9 +9,9 @@ if (mysqli_connect_errno()) {
 }
 
 // Debugging: Print all POST data
-var_dump($_POST);
-print_r($_POST);
-echo "<br>";
+//var_dump($_POST);
+//print_r($_POST);
+//echo "<br>";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Process POST request
