@@ -16,7 +16,7 @@ enum URLServices {
     static let setUsageData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUsageData.php"
     static let setUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUserData.php"
         //"http://localhost:8888/setUserData.php"
-    static let getUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/getUserData.php"
+    static let getLeaderBoard: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/getLeaderBoard.php"
     static let updateUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/updateUserData.php"
     static let updateDailyStats: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setDailyStats.php"
     
@@ -53,37 +53,37 @@ class Network{
     }
     
     func JSONRequest(url: String, jsonBody: [String: Any], completion: @escaping (Result<ServerResponse, Error>) -> Void) {
-            guard let requestUrl = URL(string: url) else {
-                completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))
+        guard let requestUrl = URL(string: url) else {
+            completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))
+            return
+        }
+
+        var request = URLRequest(url: requestUrl)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
+            request.httpBody = jsonData
+        } catch {
+            completion(.failure(error))
+            return
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(.failure(error ?? NSError(domain: "NetworkError", code: -2, userInfo: nil)))
                 return
             }
-
-            var request = URLRequest(url: requestUrl)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
             do {
-                let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: [])
-                request.httpBody = jsonData
+                let serverResponse = try JSONDecoder().decode(ServerResponse.self, from: data)
+                completion(.success(serverResponse))
             } catch {
                 completion(.failure(error))
-                return
             }
-
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {
-                    completion(.failure(error ?? NSError(domain: "NetworkError", code: -2, userInfo: nil)))
-                    return
-                }
-
-                do {
-                    let serverResponse = try JSONDecoder().decode(ServerResponse.self, from: data)
-                    completion(.success(serverResponse))
-                } catch {
-                    completion(.failure(error))
-                }
-            }.resume()
-        }
+        }.resume()
+    }
     
     func response(request: URLRequest, completionBlock: @escaping (Data) -> Void) -> Void {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in

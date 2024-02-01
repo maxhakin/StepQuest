@@ -310,7 +310,9 @@ class GameScene: SKScene {
         networkHandler?.insertDailyStats(userID: gameStateHandler!.userID, dailySteps: healthKitHandler!.dailySteps)
     }
     
-    
+    func setUsageData() {
+        networkHandler?.setUsageData(userID: gameStateHandler!.userID, highLevel: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
+    }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         

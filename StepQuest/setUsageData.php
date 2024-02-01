@@ -1,6 +1,6 @@
 <?php
 // Create connection to database
-$con = mysqli_connect("localhost", "unn_w22064166", "Mnimhiasb1", "unn_w22064166");
+$conn = mysqli_connect("localhost", "unn_w22064166", "Mnimhiasb1", "unn_w22064166");
 
 // Check connection
 if (mysqli_connect_errno()) {
@@ -8,21 +8,21 @@ if (mysqli_connect_errno()) {
 }
 
 // Data sent from the client with a POST request
-$userID = $con->real_escape_string($_POST['userID']);
-$steps = $con->real_escape_string($_POST['steps']);
-$level = $con->real_escape_string($_POST['level']);
+$userID = $conn->real_escape_string($_POST['userID']);
+$steps = $conn->real_escape_string($_POST['steps']);
+$level = $conn->real_escape_string($_POST['level']);
 
 // Prepare the INSERT statement with NOW() for the current datetime
-$stmt = $con->prepare("INSERT INTO appUsage (userID, date, steps, level) VALUES (?, NOW(), ?, ?)");
+$stmt = $conn->prepare("INSERT INTO usageData (userID, accessTime, totalSteps, highLevel) VALUES (?, NOW(), ?, ?)");
 $stmt->bind_param("iii", $userID, $steps, $level);
 
 // Execute the query and check if it was successful
 if ($stmt->execute()) {
-    echo "New record created successfully";
+    echo json_encode(["success" => true, "message" => "Usage Data inserted successfully."]);
 } else {
-    echo "Error: " . $stmt->error;
+    echo json_encode(["success" => false, "message" => "Error executing statement: " . $stmt->error]);
 }
 
 $stmt->close();
-mysqli_close($con);
+mysqli_close($conn);
 ?>

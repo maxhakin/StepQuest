@@ -20,19 +20,20 @@ class NetworkHandler {
     }
     
     //Fetch user data from remote database through network API
-    func fetchUserData() {
-        let url = URLServices.getUserData
-        let request = network.request(parameters: ["userID": "someUserID"], url: url)
+    func setUsageData(userID: Int, highLevel: Int, totalSteps: Int) {
+        let parameters = ["userID": userID, "level": highLevel, "steps": totalSteps] as [String: Any]
+        print(parameters)
+        let request = network.request(parameters: parameters, url: URLServices.setUsageData)
         
         network.response(request: request) { data in
-            self.network.handleResponse(data: data) { result in
+            self.network.handleServerResponse(data: data) { result in
                 switch result {
-                case .success(let users):
-                    // Update your UI with user data
-                    print(users)
+                case .success(let serverResponse):
+                    // Handle successful response
+                    print(serverResponse.message ?? "Success")
                 case .failure(let error):
-                    // Handle the error
-                    print(error)
+                    // Handle error
+                    print(error.localizedDescription)
                 }
             }
         }
@@ -89,8 +90,6 @@ class NetworkHandler {
     
     // Insert new row of usage data into remote database
     func insertDailyStats(userID: Int, dailySteps: [DailyStepCount]) {
-        //print(dailySteps)
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
 
@@ -98,18 +97,9 @@ class NetworkHandler {
             let dateString = dateFormatter.string(from: stat.date)
             return ["date": dateString, "steps": stat.steps]
         }
-        
-        //print(formattedSteps)
 
-        // Serialize the formatted steps array to a JSON string
-        guard let stepsData = try? JSONSerialization.data(withJSONObject: formattedSteps, options: []),
-            let stepsJSONString = String(data: stepsData, encoding: .utf8) else {
-                print("Failed to encode steps to JSON")
-                return
-            }
-
-        // Prepare parameters for the network request, including the JSON-encoded steps
-        let parameters = ["userID": userID, "dailySteps": stepsJSONString] as [String : Any]
+        // Prepare parameters for the network request, directly using the array of dictionaries
+        let parameters = ["userID": userID, "dailySteps": formattedSteps] as [String : Any]
 
         // Call the sendJSONRequest method of the Network class
         network.JSONRequest(url: URLServices.updateDailyStats, jsonBody: parameters) { result in

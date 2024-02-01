@@ -7,14 +7,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-echo json_encode(["receivedData" => $decodedData]);
-
 // Assume POST data is JSON encoded, including userID and an array of dailySteps
 $content = file_get_contents("php://input");
 $decodedData = json_decode($content, true);
 
 $userID = $decodedData['userID'];
 $dailySteps = $decodedData['dailySteps'];
+
 // Prepare SQL statement to insert or update daily steps
 $query = "INSERT INTO dailyStats (userID, date, steps) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE steps = VALUES(steps)";
 
