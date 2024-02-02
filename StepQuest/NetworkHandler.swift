@@ -117,7 +117,7 @@ class NetworkHandler {
     }
     
     func fetchLeaderboardData(completion: @escaping (Result<[LeaderboardEntry], Error>) -> Void) {
-        guard let url = URL(string: URLServices.getLeaderBoard) else {
+        guard let url = URL(string: URLServices.getLeaderboard) else {
             completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))
             return
         }

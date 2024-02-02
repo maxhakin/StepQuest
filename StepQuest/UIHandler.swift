@@ -8,16 +8,20 @@
 import Foundation
 import UIKit
 
-class UIHandler: UIViewController {
+class UIHandler: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    // This is the variable you want to set with the user's input
+    // Variables for game state and scene
     var gameStateHandler: GameStateHandler
     var gameScene: GameScene
+    var leaderboardData: [LeaderboardEntry] = [] // Placeholder for leaderboard data
     
-    init (gameStateHandler: GameStateHandler, gameScene: GameScene) {
+    // TableView property declaration
+    private var tableView: UITableView!
+
+    // Initializer
+    init(gameStateHandler: GameStateHandler, gameScene: GameScene) {
         self.gameStateHandler = gameStateHandler
         self.gameScene = gameScene
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -27,72 +31,84 @@ class UIHandler: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Additional setup if needed
+        // Call setupLeaderboardPopup() to setup and display the leaderboard popup
+        // setupLeaderboardPopup() // Uncomment this if you want to show the popup automatically
     }
     
+    // Function to create and present a text input alert
     func makeTextInput() {
-        // create the actual alert controller view that will be the pop-up
         let alertController = UIAlertController(title: "UserName", message: "Please enter your username", preferredStyle: .alert)
         
         alertController.addTextField { (textField) in
-            // configure the properties of the text field
             textField.placeholder = "UserName"
         }
         
-        
-        // add the buttons/actions to the view controller
         let saveAction = UIAlertAction(title: "Okay", style: .default) { _ in
-            
-            // this code runs when the user hits the "save" button
-            
             let inputName = alertController.textFields![0].text
-            
             self.gameStateHandler.userName = inputName!
             self.gameScene.setUserData()
-            
             self.dismiss(animated: true)
-            
         }
         
         alertController.addAction(saveAction)
-        
         present(alertController, animated: true, completion: nil)
     }
     
-    func makeLeaderboards(data: [LeaderboardEntry]) {
-        // Initialize the alert controller to present the leaderboard
-        let alertController = UIAlertController(title: "Leaderboard", message: "\n\n\n\n\n\n\n\n\n\n", preferredStyle: .alert)
-           
-        // Create a UITextView to display the leaderboard entries
-        let textView = UITextView(frame: CGRect.zero)
-        textView.isUserInteractionEnabled = false // Disable user interaction
-        textView.backgroundColor = .clear // Optional: make the background clear
-           
-        // Populate the UITextView with the leaderboard data
-        var leaderboardText = ""
-        var rank = 1
-        for entry in data {
-            leaderboardText += "\(rank): \(entry.userName): \(entry.highLevel): \(entry.totalSteps)\n"
-            rank+=1
-        }
-        textView.text = leaderboardText
-           
-        // Add the UITextView to the alert controller's view
-        alertController.view.addSubview(textView)
-           
-        // Constraints for the UITextView
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        let leadingConstraint = NSLayoutConstraint(item: textView, attribute: .leading, relatedBy: .equal, toItem: alertController.view, attribute: .leadingMargin, multiplier: 1.0, constant: 0)
-        let trailingConstraint = NSLayoutConstraint(item: textView, attribute: .trailing, relatedBy: .equal, toItem: alertController.view, attribute: .trailingMargin, multiplier: 1.0, constant: 0)
-        let topConstraint = NSLayoutConstraint(item: textView, attribute: .top, relatedBy: .equal, toItem: alertController.view, attribute: .top, multiplier: 1.0, constant: 45)
-        let bottomConstraint = NSLayoutConstraint(item: textView, attribute: .bottom, relatedBy: .equal, toItem: alertController.view, attribute: .bottom, multiplier: 1.0, constant: -45)
-        alertController.view.addConstraints([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
-           
-        // Add an 'OK' action to dismiss the alert
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        alertController.addAction(okAction)
-           
-        // Present the alert controller
-        self.present(alertController, animated: true)
+    // Setup and display the leaderboard popup
+    func setupLeaderboardPopup(data: [LeaderboardEntry]) {
+        leaderboardData = data
+        let backgroundView = UIView(frame: self.view.bounds)
+        backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        self.view.addSubview(backgroundView)
+
+        tableView = UITableView(frame: .zero, style: .plain)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.isScrollEnabled = true
+        tableView.layer.cornerRadius = 12
+        backgroundView.addSubview(tableView)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            tableView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
+            tableView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.8),
+            tableView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.6)
+        ])
+
+        let closeButton = UIButton(type: .system)
+        closeButton.setTitle("Close", for: .normal)
+        closeButton.addTarget(self, action: #selector(dismissLeaderboardPopup), for: .touchUpInside)
+        backgroundView.addSubview(closeButton)
+
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 10),
+            closeButton.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            closeButton.widthAnchor.constraint(equalToConstant: 100),
+            closeButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    // Dismiss the leaderboard popup
+    @objc private func dismissLeaderboardPopup() {
+        self.view.subviews.last?.removeFromSuperview()
+        self.dismiss(animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return leaderboardData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let entry = leaderboardData[indexPath.row]
+        cell.textLabel?.text = "\(indexPath.row + 1). \(entry.userName) - Level: \(entry.highLevel) - Steps: \(entry.totalSteps)"
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Rankings"
     }
 }

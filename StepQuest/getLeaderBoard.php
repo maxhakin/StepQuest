@@ -1,7 +1,7 @@
 <?php
 
 // Create connection
-$con = mysqli_connect("localhost","unn_w22064166","Mnimhiasb1","unn_w22064166");
+$conn = new mysqli("localhost", "unn_w22064166", "Mnimhiasb1", "unn_w22064166");
 
 // Check connection
 if ($conn->connect_error) {
@@ -13,11 +13,17 @@ $sql = "SELECT userName, highLevel, totalSteps FROM userData ORDER BY highLevel 
 
 $result = $conn->query($sql);
 
+// Set content type to JSON
+header('Content-Type: application/json');
+
 if ($result->num_rows > 0) {
     $userData = [];
 
     // Fetch associative array
     while($row = $result->fetch_assoc()) {
+        // Cast highLevel and totalSteps to integers
+        $row['highLevel'] = (int)$row['highLevel'];
+        $row['totalSteps'] = (int)$row['totalSteps'];
         $userData[] = $row;
     }
 

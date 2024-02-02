@@ -116,7 +116,7 @@ class GameScene: SKScene {
                 if action == "textInput" {
                     uiHandler.makeTextInput()
                 } else if action == "leaderboard" {
-                    uiHandler.makeLeaderboards(data: data!)
+                    uiHandler.setupLeaderboardPopup(data: data!)
                 }
             }
             
@@ -319,10 +319,9 @@ class GameScene: SKScene {
             switch result {
             case .success(let leaderboardEntries):
                 // Use the leaderboardEntries to update the UI
-                // For example, if you have a method in UIHandler to display the leaderboard, call it here
                 self.presentUIHandler(action: "leaderboard", data: leaderboardEntries)
             case .failure(let error):
-                // Handle any errors, e.g., show an error message to the user
+                // Handle any errors
                 print("Error fetching leaderboard: \(error.localizedDescription)")
             }
         }

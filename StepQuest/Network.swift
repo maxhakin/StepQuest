@@ -16,7 +16,7 @@ enum URLServices {
     static let setUsageData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUsageData.php"
     static let setUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUserData.php"
         //"http://localhost:8888/setUserData.php"
-    static let getLeaderBoard: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/getLeaderBoard.php"
+    static let getLeaderboard: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/getLeaderBoard.php"
     static let updateUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/updateUserData.php"
     static let updateDailyStats: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setDailyStats.php"
     
