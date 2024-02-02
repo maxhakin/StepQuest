@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 class ProjectileHandler {
-
+    
     var projectiles: [Projectile] = []
     weak var gameScene: GameScene?
 

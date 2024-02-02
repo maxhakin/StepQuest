@@ -12,10 +12,8 @@ protocol Downloadable: AnyObject {
 }
 
 enum URLServices {
-    // change to your PHP script in your own server.
     static let setUsageData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUsageData.php"
     static let setUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setUserData.php"
-        //"http://localhost:8888/setUserData.php"
     static let getLeaderboard: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/getLeaderBoard.php"
     static let updateUserData: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/updateUserData.php"
     static let updateDailyStats: String = "http://unn-w22064166.newnumyspace.co.uk/stepQuest/setDailyStats.php"
@@ -35,10 +33,10 @@ struct ServerResponse: Codable {
 }
 
 class Network{
+    //Prepare URL request
     func request(parameters: [String: Any], url: String) -> URLRequest {
         var request = URLRequest(url: URL(string: url)!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        //request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.httpMethod = "POST"
         
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
@@ -47,11 +45,10 @@ class Network{
             print("HTTP Body: \(bodyString)")
         }
         
-        //print(request.httpBody)
-        
         return request
     }
     
+    //Prepare JSON specific request
     func JSONRequest(url: String, jsonBody: [String: Any], completion: @escaping (Result<ServerResponse, Error>) -> Void) {
         guard let requestUrl = URL(string: url) else {
             completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))
@@ -92,23 +89,23 @@ class Network{
             }
             guard let data = data,
                 let response = response as? HTTPURLResponse,
-                error == nil else {   // check for fundamental networking error
+                // check for fundamental networking error
+                error == nil else {
                     print("error", error ?? "Unknown error")
                     return
             }
-            guard (200 ... 299) ~= response.statusCode else { //check for http errors
+            //check for http errors
+            guard (200 ... 299) ~= response.statusCode else {
                 print("statusCode should be 2xx, but is \(response.statusCode)")
                 print("response = \(response)")
                 return
             }
-            // data will be available for other models that implements the block
             completionBlock(data);
         }
         task.resume()
     }
     
-    
-    
+    //Handle JSON response from php scripts
     func handleResponse(data: Data, completion: @escaping (Result<[UserData], Error>) -> Void) {
         do {
             let users = try JSONDecoder().decode([UserData].self, from: data)
@@ -117,7 +114,7 @@ class Network{
                 completion(.failure(error))
         }
     }
-        
+    
     func handleServerResponse(data: Data, completion: @escaping (Result<ServerResponse, Error>) -> Void) {
         do {
             let response = try JSONDecoder().decode(ServerResponse.self, from: data)

@@ -13,7 +13,9 @@ class UIHandler: UIViewController, UITableViewDataSource, UITableViewDelegate {
     // Variables for game state and scene
     var gameStateHandler: GameStateHandler
     var gameScene: GameScene
-    var leaderboardData: [LeaderboardEntry] = [] // Placeholder for leaderboard data
+    
+    // Placeholder for leaderboard data
+    var leaderboardData: [LeaderboardEntry] = []
     
     // TableView property declaration
     private var tableView: UITableView!
@@ -31,8 +33,6 @@ class UIHandler: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Call setupLeaderboardPopup() to setup and display the leaderboard popup
-        // setupLeaderboardPopup() // Uncomment this if you want to show the popup automatically
     }
     
     // Function to create and present a text input alert

@@ -17,17 +17,16 @@ class TurretTower: Tower {
         var stats: (range: CGFloat, attackSpeed: TimeInterval, damage: Int, baseImage: String, topImage: String, projectileType: String, towerType: String) {
             switch self {
                 case .turret1:
-                    return (400, 10, 10, "towerBase1", "turretGun1", "bullet1", "turret1")
+                    return (400, 7, 10, "towerBase1", "turretGun1", "bullet1", "turret1")
                 case .turret2:
-                    return (500, 7, 20, "towerBase2", "turretGun2", "bullet1", "turret2")
+                    return (500, 5, 20, "towerBase2", "turretGun2", "bullet1", "turret2")
                 case .turret3:
-                    return (600, 3, 30, "towerBase3", "turretGun3", "bullet2", "turret3")
+                    return (600, 2, 30, "towerBase3", "turretGun3", "bullet2", "turret3")
             }
         }
     }
+    
     var level: TowerLevel
-    
-    
     
     init(levelString: String, enemyHandler: EnemyHandler) {
         switch levelString {
@@ -53,17 +52,10 @@ class TurretTower: Tower {
         towerType = stats.towerType
         
         makeTower()
-        createRangeCircle()
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-   
-    
-    
 }
 

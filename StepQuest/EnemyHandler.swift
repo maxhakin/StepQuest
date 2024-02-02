@@ -51,11 +51,11 @@ class EnemyHandler {
         gameScene.addChild(enemy)
     }
     
+    // Remove the enemys from the scene for when an enemy makes it to the end
     func removeAllEnemies() {
         for enemy in enemies {
-            enemy.removeFromParent() // Remove the enemys from the scene
+            enemy.removeFromParent()
         }
-        //enemies.removeAll() // Clear the array
     }
     
     func updateEnemies(deltaTime: TimeInterval) {
@@ -65,7 +65,6 @@ class EnemyHandler {
                 // Enemy has been removed from the scene, so remove it from the array
                 enemies.remove(at: index)
                 print("Enemy removed from array")
-                
                 if enemies.isEmpty {
                     gameScene.nextLevel()
                 }
@@ -73,7 +72,5 @@ class EnemyHandler {
                 enemy.move(deltaTime: deltaTime)
             }
         }
-        
-        
     }
 }

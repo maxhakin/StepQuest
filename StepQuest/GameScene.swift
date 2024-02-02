@@ -10,7 +10,6 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var inputHandler: InputHandler!
     private var initialTouchLocation: CGPoint?
     private var terrainMap: SKTileMapNode?
     private var gameCam: SKCameraNode?
@@ -50,14 +49,9 @@ class GameScene: SKScene {
         self.levelHandler = LevelHandler(enemyHandler: enemyHandler!, gameScene: self)
         levelHandler?.loadLevel()
         
-        //self.network = Network()
-        
-        
         // Initialize the SKLabelNodes
         currencyLabel = self.childNode(withName: "currencyLabel") as? SKLabelNode
         levelLabel = self.childNode(withName: "levelLabel") as? SKLabelNode
-        
-        
         
         self.gameStateHandler = GameStateHandler(towerHandler: towerHandler!, lvlHandler: levelHandler!, healthKitHandler: healthKitHandler!)
         self.networkHandler = NetworkHandler(network: network, gameStateHandler: gameStateHandler!)
@@ -67,8 +61,10 @@ class GameScene: SKScene {
             appDelegate.gameScene = self
         }
         
+        // Load game if there is a save file
         gameStateHandler?.loadGameState()
         
+        // Get healthkit authorisation and username if it is first time using app
         if healthKitHandler?.totalSteps == 0 {
             healthKitHandler?.requestAuthorization { success, error in
                 if success {
@@ -85,15 +81,12 @@ class GameScene: SKScene {
                 }
                 self.presentUIHandler(action: "textInput", data: nil)
             }
-            
-            
         } else {
+            //Fetch new steps if not first time using
             healthKitHandler?.fetchStepsSinceLastUpdate()
             print("if statement not complete")
         }
-        
-        //setUserData()
-        
+    
         // Initial update of currency and level
         updateLabels()
         
@@ -101,6 +94,7 @@ class GameScene: SKScene {
         
     }
     
+    // Create an instanc of UIHandler to handle presenting UI objects
     func presentUIHandler(action: String, data: [LeaderboardEntry]?) {
         DispatchQueue.main.async {
             guard let viewController = self.view?.window?.rootViewController else {
@@ -124,19 +118,15 @@ class GameScene: SKScene {
     }
     
     func updateLabels() {
-        // Get the current level and currency
+        // Get the current level and spendable currency
         let currentLevel = levelHandler?.getLvl() ?? 1
         let steps = healthKitHandler!.totalSteps
         let spent = healthKitHandler!.spentSteps
         let currentCurrency = Int(steps - spent)
         
-
         // Format the data with leading zeros
         let formattedLevel = String(format: "%04d", currentLevel)
         let formattedCurrency = String(format: "%07d", currentCurrency)
-
-        // Update remote database
-        //updateUserData()
         
         // Update the label texts
         currencyLabel?.text = formattedCurrency
@@ -150,6 +140,7 @@ class GameScene: SKScene {
         terrainMap = tileMapNode
     }
     
+    // Create an ordered path for walking enemie to follow
     func loadWalkPath() {
         walkPath = self["walkPath"]
         walkPath.sort { (node1, node2) in
@@ -159,6 +150,7 @@ class GameScene: SKScene {
         }
     }
     
+    // Create an ordered path for the flying enemies to follow
     func loadFlyPath() {
         flyPath = self["flyPath"]
         flyPath.sort { (node1, node2) in
@@ -176,43 +168,18 @@ class GameScene: SKScene {
         return towerPlaces
     }
         
-    func touchDown(atPoint pos : CGPoint) {
-            
-    }
-        
-    func touchMoved(toPoint pos : CGPoint) {
-            
-    }
-        
-    func touchUp(atPoint pos : CGPoint) {
-            
-    }
-        
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {return}
         initialTouchLocation = touch.location(in: self)
     }
-        
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-            
-    }
-        
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-    }
-        
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-            
-    }
-    
+     
     func restartLevel() {
         levelHandler?.loadLevel()
     }
     
+    // Increment level
     func nextLevel() {
-        //level+=1
         levelHandler?.level += 1
-        
         restartLevel()
     }
     
@@ -222,6 +189,7 @@ class GameScene: SKScene {
         towerMenu = nil
     }
     
+    // Handle user input for tower menu dependant on type of button clicked
     func handleTowerMenuButtonTap(button: TowerMenuButton) {
         let switcher = button.actionString
         if let menu = button.parent as? TowerMenu {
@@ -264,28 +232,28 @@ class GameScene: SKScene {
                 towerHandler?.deleteTower(at: place!)
             default:
                 return
-                
             }
         }
     }
     
+    // Place tower and increase spent steps by tower cost
     func buyTower() {
-        healthKitHandler?.spentSteps += 2000
+        healthKitHandler?.spentSteps += 1000
         updateLabels()
         updateUserData()
     }
     
+    // Check if user has enough steps to purchase tower
     func canAfford() -> Bool {
         let steps = healthKitHandler!.totalSteps
         let spent = healthKitHandler!.spentSteps
         let currentCurrency = steps - spent
-        if currentCurrency >= 2000 {
+        if currentCurrency >= 1000 {
             return true
         } else {return false}
     }
         
     override func update(_ currentTime: TimeInterval) {
-        
         // Called before each frame is rendered
         let deltaTime = currentTime - lastUpdateTime
         
@@ -298,22 +266,27 @@ class GameScene: SKScene {
         projectileHandler?.update(deltaTime: deltaTime)
     }
     
+    // Network function, sets initial data in userData tables
     func setUserData() {
         networkHandler?.setUserData(username: gameStateHandler!.userName, highLevel: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
     }
     
+    // Network function, updates total steps and high level in userData table
     func updateUserData() {
         networkHandler?.updateUserData(id: gameStateHandler!.userID, level: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
     }
     
+    // Network function, inserts / updates rows in the dailyStats table
     func insertDailyStats() {
         networkHandler?.insertDailyStats(userID: gameStateHandler!.userID, dailySteps: healthKitHandler!.dailySteps)
     }
     
+    // Network function, inserts into usageData, called anytime the app comes into focus
     func setUsageData() {
         networkHandler?.setUsageData(userID: gameStateHandler!.userID, highLevel: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
     }
     
+    // Network function, retrieves relevant data for use in leaderboard
     func loadLeaderBoard() {
         networkHandler!.fetchLeaderboardData { result in
             switch result {
@@ -327,6 +300,7 @@ class GameScene: SKScene {
         }
     }
     
+    // Handles all user input for the app
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         
         let viewLocation = recognizer.location(in: self.view)
@@ -370,10 +344,7 @@ class GameScene: SKScene {
                         towerMenu = TowerMenu(menuType: towerType!, place: place)
                         addChild(towerMenu!)
                     }
-                    
                 }
-                // towerHandler?.addTurretTower(at: place, levelString: "level1")
-                // break
             }
         }
         
@@ -393,6 +364,7 @@ class GameScene: SKScene {
                     print("Error: Place is nil")
                 }
             } else {
+                // Check if spriteNode is leaderboard button
                 if spriteNode.name == "leaderboard" {
                     loadLeaderBoard()
                 } else {

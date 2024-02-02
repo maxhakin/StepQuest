@@ -36,6 +36,7 @@ class LevelHandler {
         self.gameScene = gameScene
     }
     
+    // Scales each level to be more difficult than the last with more enemies
     func scaleForLevel(level: Int) -> Double {
         let baseScale = 1.0
         let growthFactor = 0.2 // Controls how quickly the difficulty scales
@@ -47,6 +48,7 @@ class LevelHandler {
         return initialSpawnRates.map { EnemySpawnRate(type: $0.type, rate: $0.rate * scale) }
     }
     
+    // Creates an array of enemies to spawn for the level
     func generateSpawnSequence(forLevel level: Int) -> [EnemyType] {
         let rates = spawnRatesForLevel(level: level)
         var sequence: [EnemyType] = []
@@ -63,10 +65,10 @@ class LevelHandler {
                 remainingCounts[index].count -= 1
             }
         }
-        
         return sequence
     }
     
+    // Spawns enemies based of the spawn sequence in a delayed pattern
     func spawnEnemies() {
         let spawnInterval = 2.0 // Adjust as needed
         let spawnSequence = generateSpawnSequence(forLevel: level)
@@ -86,7 +88,6 @@ class LevelHandler {
                 case .wings:
                     self.enemyHandler.makeWings()
                 }
-                
             }
         }
     }
@@ -97,11 +98,11 @@ class LevelHandler {
     
     func setLvl(level: Int) {
         self.level = level
-        
     }
     
     func loadLevel() {
         enemyHandler.removeAllEnemies()
         spawnEnemies()
-        gameScene.updateLabels()    }
+        gameScene.updateLabels()
+    }
 }

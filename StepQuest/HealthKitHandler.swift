@@ -39,7 +39,7 @@ class HealthKitHandler {
             return
         }
 
-        // Define the data types we want to read and write
+        // Define the data types we want to access
         guard let stepsCount = HKObjectType.quantityType(forIdentifier: .stepCount) else {
             completion(false, HealthKitError.dataTypeNotAvailable)
             return
@@ -48,20 +48,16 @@ class HealthKitHandler {
         // Request authorization
         healthStore.requestAuthorization(toShare: [], read: [stepsCount]) { success, error in
             completion(success, error)
-            print("Authorisation Succesful")
             self.fetchInitialWeeksSteps()
         }
     }
     
-    
+    // Get step data from the date taken till now
     func getSteps(from lastDay: Date) {
-        
         let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
-        
         let now = Date()
         let startOfLastDay = Calendar.current.startOfDay(for: lastDay)
         let predicate = HKQuery.predicateForSamples(withStart: startOfLastDay, end: now, options: .strictStartDate)
-        
         let query = HKStatisticsCollectionQuery.init(quantityType: stepsType,
                                                      quantitySamplePredicate: predicate,
                                                      options: .cumulativeSum,
@@ -94,20 +90,15 @@ class HealthKitHandler {
             }
             self.setTotalSpendableSteps()
             self.timeLastUpdated = now
-            print(self.totalSteps)
         }
-        
         healthStore.execute(query)
-        print("query skipped?")
     }
 
-    
+    // Fetch the steps from a week before when the app is first accessed
     func fetchInitialWeeksSteps() {
-        print("Initial week called")
         let now = Date()
         firstTimeAccessed = Calendar.current.startOfDay(for: now)
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
-        
         getSteps(from: weekAgo)
     }
     
@@ -126,7 +117,7 @@ class HealthKitHandler {
         totalSteps = filteredCounts.reduce(0) { $0 + $1.steps }
     }
     
-    
+    // Set all relevant data when loaded from a save file
     func setData(lastTime: Date, stepData: [DailyStepCount], firstTime: Date, stepTotal: Int, spentTotal: Int) {
         timeLastUpdated = lastTime
         dailySteps = stepData

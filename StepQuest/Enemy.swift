@@ -25,25 +25,22 @@ class Enemy: SKSpriteNode {
         self.imageFile = imageFile
         self.health = health
         self.moveSpeed = moveSpeed
-        
         self.gameScene = gameScene
-        
         let texture = SKTexture(imageNamed: imageFile)
         self.path = path
         super.init(texture: texture, color: .clear, size: texture.size())
-        
         
         self.position = getStartPos() ?? CGPointZero
         self.zPosition = 2.0
         
         animateWalk()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // Get the spawn point based of which path the enemy has been set
     func getStartPos() -> CGPoint? {
             if let firstNode = path.first {
                 return firstNode.position
@@ -54,6 +51,7 @@ class Enemy: SKSpriteNode {
             }
         }
     
+    // Prepare the walk textures for use in animation
     func loadWalkTextures() -> [SKTexture] {
         var textures: [SKTexture] = []
         textures.append(SKTexture(imageNamed: imageFile))
@@ -98,7 +96,7 @@ class Enemy: SKSpriteNode {
         if health <= 0 {
             die()
         } else {
-            // Make enemy flash red takin damage
+            // Make enemy flash red taking damage
             let originalColor = self.color
             let redAction = SKAction.colorize(with: .red, colorBlendFactor: 1.0, duration: 0.1)
             let originalColorAction = SKAction.colorize(with: originalColor, colorBlendFactor: 0.0, duration: 0.1)
@@ -109,10 +107,6 @@ class Enemy: SKSpriteNode {
     
     func die() {
         removeFromParent()
-    }
-    
-    func initPos() {
-        
     }
     
     func move(deltaTime: TimeInterval) {
@@ -140,16 +134,16 @@ class Enemy: SKSpriteNode {
         // Check if the enemy has reached the waypoint
         if self.position == goalPos {
             if currentWaypoint < path.count - 1 {
-                currentWaypoint += 1  // Move to the next waypoint
+                // Set the next waypoint as the new goal
+                currentWaypoint += 1
             } else {
                 removeFromParent()
                 gameScene.restartLevel()
             }
-            
-            
         }
     }
     
+    // For use in debugging to check enemy has been deinitialised once removed
     deinit {
         print("Enemy instance is being deallocated")
     }

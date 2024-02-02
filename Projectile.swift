@@ -15,10 +15,8 @@ class Projectile: SKNode {
     var damageRadius: CGFloat
     var moveSpeed: CGFloat
     var projImage: SKSpriteNode
-    
     var target: Enemy
     var lastPos: CGPoint = CGPoint(x: 0, y: 0)
-    
     
     enum ProjectileType {
         case bullet1
@@ -96,11 +94,6 @@ class Projectile: SKNode {
     }
     
     func move(deltaTime: TimeInterval) {
-        //guard let targetParent = target.parent else {
-        //   removeFromParent()
-        //    return
-        //}
-        
         // Calculate the distance between the current position and the target
         let dx = target.position.x - position.x
         let dy = target.position.y - position.y
@@ -122,7 +115,7 @@ class Projectile: SKNode {
         position.x += deltaX
         position.y += deltaY
 
-        // Check if the projectile has reached the target
+        // Check if the projectile has reached the target, if it has damage target and remove
         if distance <= moveSpeed * CGFloat(deltaTime) {
             damageEnemy()
             removeFromParent()

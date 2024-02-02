@@ -21,7 +21,6 @@ class Tower: SKNode {
     var projectileType: String?
     
     var towerType: String = ""
-    //var towerLocation: CGPoint?
     var enemyHandler: EnemyHandler
     
     var scale: CGFloat = 0.65
@@ -69,14 +68,16 @@ class Tower: SKNode {
     
     }
     
+    // Create visual range of tower for debugging
     func createRangeCircle() {
-        rangeCircle?.removeFromParent() // Remove existing circle if any
+        // Remove existing circle if there is any
+        rangeCircle?.removeFromParent()
 
         let circle = SKShapeNode(circleOfRadius: range)
-        circle.fillColor = SKColor.blue.withAlphaComponent(0.3) // Semi-transparent blue
+        circle.fillColor = SKColor.blue.withAlphaComponent(0.3)
         circle.strokeColor = SKColor.blue
         circle.lineWidth = 1
-        circle.zPosition = 2  // Ensure it's below the turret
+        circle.zPosition = 2
         addChild(circle)
 
         rangeCircle = circle
@@ -100,31 +101,29 @@ class Tower: SKNode {
         
     }
     
+    // Find furthest along target in range
     func getTarget() -> Enemy? {
         var targetEnemy: Enemy?
         var furthestWaypoint = -1
         var closestDistance = CGFloat.infinity
-
+        
+        // Cycle through all possible enemies
         for enemy in enemyHandler.enemies {
             let distance = distanceTo(enemy: enemy)
-            //print(distance)
             //Check if target is within range of the tower
             if distance <= range {
                 let waypointIndex = enemy.currentWaypoint
                 let distanceIndex = enemy.getGoalDistance()
-                //print("Enemy in range")
                 
-                //Check if enemy is further along the path than other enemies, set the enemy as target enemy if it is
+                //Check if enemy is furthest along the path, set target enemy if it is
                 if waypointIndex >= furthestWaypoint {
                     furthestWaypoint = waypointIndex
                     if closestDistance >= distanceIndex {
                         targetEnemy = enemy
-                        //print("target set", (targetEnemy?.position.x)!, (targetEnemy?.position.y)!)
                     }
                 }
             }
         }
-        
         furthestWaypoint = -1
         closestDistance = CGFloat.infinity
         return targetEnemy
@@ -146,6 +145,7 @@ class Tower: SKNode {
         return towerPositionInScene
     }
     
+    // rotate turret sprite to face the target enemy
     func rotateTurret(deltaTime: TimeInterval) {
         guard let targetEnemy = getTarget() else { return }
         let turretPos = parent!.convert(self.position, to: scene!)
@@ -157,12 +157,14 @@ class Tower: SKNode {
         top!.zRotation += angleDifference * CGFloat(rotationSpeed) * CGFloat(deltaTime)
     }
     
+    // Calculates and returns the angle between the tower and the target enemy
     func angleToTarget(from turretPosition: CGPoint, to targetPosition: CGPoint) -> CGFloat {
         let deltaX = targetPosition.x - turretPosition.x
         let deltaY = targetPosition.y - turretPosition.y
         return atan2(deltaY, deltaX)
     }
     
+    // Assess which direction to rotate depending on what would be the smaller angle
     func shortestAngleBetween(angle1: CGFloat, angle2: CGFloat) -> CGFloat {
         var angle = (angle2 - angle1).truncatingRemainder(dividingBy: 2 * .pi)
         
@@ -175,19 +177,12 @@ class Tower: SKNode {
         return angle
     }
     
-    func delete() {
-        
-    }
-    
     func update(deltaTime: TimeInterval, projectileHandler: ProjectileHandler) {
         rotateTurret(deltaTime: deltaTime)
         attack(projectileHandler: projectileHandler)
     }
     
-    func render() {
-        
-    }
-    
+    // For use in debugging to check tower is deinitialised when deleted
     deinit {
         print("Tower has been removed")
     }

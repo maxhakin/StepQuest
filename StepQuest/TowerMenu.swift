@@ -87,6 +87,7 @@ class TowerMenu: SKNode {
         addChild(turretTowerButton!)
     }
     
+    // Create upgrade tower menu with options between the next upgrade or delete
     func createUpgradeMenu() {
         let turret = mergeImages(baseImage: baseImage!, topImage: topImage!)
         
@@ -100,6 +101,7 @@ class TowerMenu: SKNode {
         
     }
     
+    // Create only the delete button
     func createDeleteMenu() {
         let delete = SKTexture(imageNamed: "delete")
         
@@ -107,9 +109,8 @@ class TowerMenu: SKNode {
         
         addChild(deleteButton!)
     }
-
-        // Add methods to handle button actions
     
+    // Prepare texture for use by buttons
     func mergeImages(baseImage: String, topImage: String) -> SKTexture {
         // Load the top and base images to merge
         let baseNode = SKSpriteNode(imageNamed: baseImage)

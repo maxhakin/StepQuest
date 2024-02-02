@@ -17,13 +17,12 @@ class NetworkHandler {
     var network: Network
     var gameStateHandler: GameStateHandler
     
-    
     init(network: Network, gameStateHandler: GameStateHandler) {
         self.network = network
         self.gameStateHandler = gameStateHandler
     }
     
-    //Fetch user data from remote database through network API
+    //Set usage data from remote database through network API
     func setUsageData(userID: Int, highLevel: Int, totalSteps: Int) {
         let parameters = ["userID": userID, "level": highLevel, "steps": totalSteps] as [String: Any]
         print(parameters)
@@ -59,7 +58,6 @@ class NetworkHandler {
                         if let userID = serverResponse.userID {
                             // Set userID to userID returned from the server
                             self.gameStateHandler.userID = userID
-                            print("User ID: \(userID)")
                         }
                     } else {
                         // Server returned an error
@@ -73,10 +71,10 @@ class NetworkHandler {
         }
     }
     
-    // Update highlevel and totalSteps fow row in userID remote database where userID = userID
+    // Update highlevel and totalSteps in userID remote database where userID = userID
     func updateUserData(id: Int, level: Int, totalSteps: Int) {
         let parameters = ["userID": id, "highLevel": level, "totalSteps": totalSteps] as [String: Any]
-        let request = network.request(parameters: parameters, url: URLServices.updateUserData) // Use your actual URL here
+        let request = network.request(parameters: parameters, url: URLServices.updateUserData)
         
         network.response(request: request) { data in
             self.network.handleServerResponse(data: data) { result in
@@ -116,6 +114,7 @@ class NetworkHandler {
         }
     }
     
+    // Fetch all rows in userData for use in leaderboard
     func fetchLeaderboardData(completion: @escaping (Result<[LeaderboardEntry], Error>) -> Void) {
         guard let url = URL(string: URLServices.getLeaderboard) else {
             completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))

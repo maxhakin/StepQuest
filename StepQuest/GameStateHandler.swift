@@ -18,7 +18,6 @@ struct GameState: Codable {
     var firstTimeAccessed: Date?
     var totalSteps: Int
     var spentSteps: Int
-    //Add other relevant game state properties
 }
 
 struct TowerData: Codable {
@@ -31,9 +30,9 @@ class GameStateHandler {
     private var towerHandler: TowerHandler
     private var levelHandler: LevelHandler
     private var healthKitHandler: HealthKitHandler
-    var userID: Int = 55
-    var userName: String = "ellierocks"
-    
+    // Set placeholders for userName and userID
+    var userID: Int = 0
+    var userName: String = ""
     
     init(towerHandler: TowerHandler, lvlHandler: LevelHandler, healthKitHandler: HealthKitHandler) {
         self.towerHandler = towerHandler
@@ -46,6 +45,7 @@ class GameStateHandler {
         return documentsDirectory.appendingPathComponent("GameState.json")
     }
     
+    // Save all relevant game data to a JSON file on app shut down
     func saveGameState() {
         let gameState = GameState(userID: userID, userName: userName, level: getLvlData(), towerData: getTowerData(), timeLastUpdated: Date(), dailyStepData: healthKitHandler.dailySteps, firstTimeAccessed: healthKitHandler.firstTimeAccessed, totalSteps: Int(healthKitHandler.totalSteps), spentSteps: Int(healthKitHandler.spentSteps))
         do {
@@ -57,6 +57,7 @@ class GameStateHandler {
         }
     }
     
+    // Load all relevant game data from a JSON file on app load up
     func loadGameState() {
         let filePath = gameStateFilePath()
         do {

@@ -19,7 +19,6 @@ class TowerHandler {
     init(gameScene: GameScene) {
         self.gameScene = gameScene
         towerPlaces = gameScene.getTowerPlaces()
-        
         self.projectileHandler = gameScene.projectileHandler!
         self.enemyHandler = gameScene.enemyHandler!
     }
@@ -66,7 +65,7 @@ class TowerHandler {
         if let index = getTower(at: place) {
             // Remove children from tower
             towers[index].removeAllChildren()
-            // Remove the tower from the scene if necessary
+            // Remove the tower from tparenty
             towers[index].removeFromParent()
             
             // Remove the tower from the array
@@ -79,6 +78,7 @@ class TowerHandler {
         return towers.firstIndex(where: { $0.parent === place })
     }
     
+    // Check if a tower is at place
     func isTower(at place: SKShapeNode) -> Bool {
         if place.children.count > 0 {
             return true
@@ -87,10 +87,12 @@ class TowerHandler {
         }
     }
     
+    // get an array of towers for use in saving of gamestate
     func getTowerDataArray() -> [TowerData] {
         return towers.map { $0.getTowerData() }
     }
     
+    // Load towers based off save file
     func restoreTowers(towerData: [TowerData]) {
         let towerPlaces: [SKShapeNode] = (gameScene?.getTowerPlaces())!
         for towerDatum in towerData {
