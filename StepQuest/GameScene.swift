@@ -83,7 +83,7 @@ class GameScene: SKScene {
                     }
                     // Handle authorization denial or error gracefully
                 }
-                self.presentUIHandler(action: "textInput")
+                self.presentUIHandler(action: "textInput", data: nil)
             }
             
             
@@ -101,7 +101,7 @@ class GameScene: SKScene {
         
     }
     
-    func presentUIHandler(action: String) {
+    func presentUIHandler(action: String, data: [LeaderboardEntry]?) {
         DispatchQueue.main.async {
             guard let viewController = self.view?.window?.rootViewController else {
                 print("Could not find a root view controller.")
@@ -116,7 +116,7 @@ class GameScene: SKScene {
                 if action == "textInput" {
                     uiHandler.makeTextInput()
                 } else if action == "leaderboard" {
-                    uiHandler.makeLeaderboards()
+                    uiHandler.makeLeaderboards(data: data!)
                 }
             }
             
@@ -314,6 +314,20 @@ class GameScene: SKScene {
         networkHandler?.setUsageData(userID: gameStateHandler!.userID, highLevel: levelHandler!.level, totalSteps: healthKitHandler!.totalSteps)
     }
     
+    func loadLeaderBoard() {
+        networkHandler!.fetchLeaderboardData { result in
+            switch result {
+            case .success(let leaderboardEntries):
+                // Use the leaderboardEntries to update the UI
+                // For example, if you have a method in UIHandler to display the leaderboard, call it here
+                self.presentUIHandler(action: "leaderboard", data: leaderboardEntries)
+            case .failure(let error):
+                // Handle any errors, e.g., show an error message to the user
+                print("Error fetching leaderboard: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         
         let viewLocation = recognizer.location(in: self.view)
@@ -380,7 +394,11 @@ class GameScene: SKScene {
                     print("Error: Place is nil")
                 }
             } else {
-                print("Error: Tower is nil")
+                if spriteNode.name == "leaderboard" {
+                    loadLeaderBoard()
+                } else {
+                    print("Error: Tower is nil")
+                }
             }
         }
     }

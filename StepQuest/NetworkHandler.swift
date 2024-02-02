@@ -7,7 +7,11 @@
 
 import Foundation
 
-
+struct LeaderboardEntry: Codable {
+    let userName: String
+    let highLevel: Int
+    let totalSteps: Int
+}
 
 class NetworkHandler {
     var network: Network
@@ -111,4 +115,34 @@ class NetworkHandler {
             }
         }
     }
+    
+    func fetchLeaderboardData(completion: @escaping (Result<[LeaderboardEntry], Error>) -> Void) {
+        guard let url = URL(string: URLServices.getLeaderBoard) else {
+            completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(NSError(domain: "DataError", code: -2, userInfo: nil)))
+                return
+            }
+            
+            do {
+                let leaderboardEntries = try JSONDecoder().decode([LeaderboardEntry].self, from: data)
+                completion(.success(leaderboardEntries))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
 }
